@@ -1,0 +1,121 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    use WithoutModelEvents;
+
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        // Create Admin
+        User::create([
+            'name' => 'Administrator',
+            'email' => 'admin@uinssc.ac.id',
+            'password' => bcrypt('password'),
+            'role' => 'admin'
+        ]);
+
+        // Create Fakultas
+        $fakultasId = \App\Models\Fakultas::create(['nama_fakultas' => 'Fakultas Sains dan Teknologi'])->id;
+        
+        // Create Program Studi
+        $prodiId = \App\Models\ProgramStudi::create([
+            'fakultas_id' => $fakultasId,
+            'nama_program_studi' => 'Teknik Informatika'
+        ])->id;
+
+        // Create Mata Kuliah
+        $mk1 = \App\Models\SiakadMataKuliah::create([
+            'kode_mata_kuliah' => 'IF101',
+            'nama_mata_kuliah' => 'Pemrograman Dasar',
+            'sks' => 3,
+            'semester' => '1',
+        ]);
+        $mk2 = \App\Models\SiakadMataKuliah::create([
+            'kode_mata_kuliah' => 'IF102',
+            'nama_mata_kuliah' => 'Basis Data',
+            'sks' => 3,
+            'semester' => '1',
+        ]);
+
+        // Create 5 Mahasiswa
+        for ($i = 1; $i <= 5; $i++) {
+            $user = User::create([
+                'name' => 'Mahasiswa ' . $i,
+                'email' => 'mhs' . $i . '@uinssc.ac.id',
+                'password' => bcrypt('password'),
+                'role' => 'mahasiswa'
+            ]);
+
+            $mhs = \App\Models\Mahasiswa::create([
+                'user_id' => $user->id,
+                'nim' => '22000' . $i,
+                'nama' => $user->name,
+                'fakultas_id' => $fakultasId,
+                'program_studi_id' => $prodiId,
+                'jenjang' => 'S1',
+                'angkatan' => '2022'
+            ]);
+
+            // Add Siakad Data
+            \App\Models\SiakadMahasiswa::create([
+                'mahasiswa_id' => $mhs->id,
+                'nim' => $mhs->nim,
+                'nama' => $mhs->nama,
+                'fakultas' => 'Fakultas Sains dan Teknologi',
+                'program_studi' => 'Teknik Informatika',
+                'angkatan' => '2022'
+            ]);
+
+            // Add Nilai
+            \App\Models\SiakadNilai::create([
+                'mahasiswa_id' => $mhs->id,
+                'mata_kuliah_id' => $mk1->id,
+                'semester' => '1',
+                'nilai_huruf' => 'A',
+                'nilai_angka' => 4.00,
+                'bobot' => 4.00,
+                'sks' => 3
+            ]);
+            
+            \App\Models\SiakadNilai::create([
+                'mahasiswa_id' => $mhs->id,
+                'mata_kuliah_id' => $mk2->id,
+                'semester' => '1',
+                'nilai_huruf' => 'B',
+                'nilai_angka' => 3.00,
+                'bobot' => 3.00,
+                'sks' => 3
+            ]);
+
+            // Add Wisudawan
+            $wisudawan = \App\Models\Wisudawan::create([
+                'mahasiswa_id' => $mhs->id,
+                'nim' => $mhs->nim,
+                'periode_wisuda' => 'Ganjil 2026',
+                'fakultas' => 'Fakultas Sains dan Teknologi',
+                'program_studi' => 'Teknik Informatika',
+                'judul_skripsi' => 'Analisis Algoritma ' . $i,
+                'predikat_kelulusan' => 'Pujian'
+            ]);
+
+            // Add Transkrip Draft
+            \App\Models\Transkrip::create([
+                'mahasiswa_id' => $mhs->id,
+                'wisudawan_id' => $wisudawan->id,
+                'total_sks' => 6,
+                'total_mutu' => 21,
+                'ipk' => 3.50,
+                'kode_verifikasi' => \Illuminate\Support\Str::uuid()
+            ]);
+        }
+    }
+}
