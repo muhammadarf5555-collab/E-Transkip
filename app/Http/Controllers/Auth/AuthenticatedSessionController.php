@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\AuditLog;
+use App\Services\SiakadApiService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +30,29 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = Auth::user();
+
+        if (isset($user->status_aktif) && ! $user->status_aktif) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')->withErrors([
+                'email' => 'Akun Anda dinonaktifkan oleh Administrator.',
+            ]);
+        }
+
+        AuditLog::record('Login ke sistem', 'Auth', (string) $user->id, 'Pengguna '.$user->name.' ('.$user->role.') berhasil login.');
+
+        if ($user->isSuperAdmin()) {
+            return redirect()->intended(route('super-admin.dashboard', absolute: false));
+        }
+
+        if ($user->isAdminFakultas()) {
+            return redirect()->intended(route('admin.dashboard', absolute: false));
+        }
+
+        return redirect()->intended(route('mahasiswa.dashboard', absolute: false));
     }
 
     /**
@@ -36,6 +60,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        if (Auth::check()) {
+            AuditLog::record('Logout dari sistem', 'Auth', (string) Auth::id(), 'Pengguna '.Auth::user()->name.' logout.');
+        }
+
+        $siakadToken = session('siakad_token');
+        if ($siakadToken) {
+            app(SiakadApiService::class)->logout($siakadToken);
+            session()->forget('siakad_token');
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

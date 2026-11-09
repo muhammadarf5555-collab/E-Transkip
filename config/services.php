@@ -35,4 +35,21 @@ return [
         ],
     ],
 
+    'siakad' => [
+        'base_url' => rtrim(env('SIAKAD_API_BASE_URL', 'http://localhost:8000'), '/'),
+        'timeout' => (int) env('SIAKAD_API_TIMEOUT', 10),
+    ],
+
+    'bridge' => [
+        'base_url' => rtrim(env('BRIDGE_API_BASE_URL', 'https://bridge.uinssc.ac.id/api'), '/'),
+        'token' => env('BRIDGE_API_TOKEN', ''),
+        'timeout' => (int) env('BRIDGE_API_TIMEOUT', 10),
+    ],
+
+    'ewisuda' => [
+        'base_url' => rtrim(env('EWISUDA_API_BASE_URL', 'https://wisuda.uinssc.ac.id'), '/'),
+        'api_key' => env('EWISUDA_API_KEY', ''),
+        'timeout' => (int) env('EWISUDA_API_TIMEOUT', 15),
+    ],
+
 ];
