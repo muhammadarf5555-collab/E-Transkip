@@ -40,3 +40,4 @@ php-fpm -D
 # Start Nginx in foreground
 echo "E-Transkrip is running on port 80..."
 exec nginx -g "daemon off;"
+
