@@ -72,6 +72,7 @@ Route::middleware(['auth', 'role:admin,admin_fakultas,super_admin'])->prefix('ad
     Route::post('/program-studi/sync-api', [ProgramStudiController::class, 'syncApi'])->name('program-studi.sync-api');
     Route::resource('program-studi', ProgramStudiController::class)->except(['create', 'show', 'edit']);
     Route::resource('mata-kuliah', SiakadMataKuliahController::class)->except(['create', 'show', 'edit']);
+    Route::post('/mahasiswa/sync-siakad', [MahasiswaController::class, 'syncSiakad'])->name('mahasiswa.sync-siakad');
     Route::resource('mahasiswa', MahasiswaController::class);
 
     // SIAKAD Module
@@ -102,10 +103,12 @@ Route::middleware(['auth', 'role:admin,admin_fakultas,super_admin'])->prefix('ad
     Route::get('/wisudawan/template', [WisudawanController::class, 'downloadTemplate'])->name('wisudawan.template');
     Route::resource('wisudawan', WisudawanController::class);
 
-    // Transkrip Module (Operasional: Sinkronisasi, Validasi, Detail, Cetak PDF)
+    // Transkrip Module (Operasional: Sinkronisasi, Input Manual Terpadu, Validasi, Detail, Cetak PDF)
     Route::get('/transkrip', [TranskripController::class, 'index'])->name('transkrip.index');
     Route::post('/transkrip/sync', [TranskripController::class, 'sync'])->name('transkrip.sync');
+    Route::post('/transkrip/store-manual', [TranskripController::class, 'storeManual'])->name('transkrip.store-manual');
     Route::get('/transkrip/{transkrip}', [TranskripController::class, 'show'])->name('transkrip.show');
+    Route::put('/transkrip/{transkrip}/update-complete', [TranskripController::class, 'updateComplete'])->name('transkrip.update-complete');
     Route::post('/transkrip/{transkrip}/validate', [TranskripController::class, 'validateTranskrip'])->name('transkrip.validate');
     Route::get('/transkrip/{transkrip}/pdf', [TranskripController::class, 'downloadPdf'])->name('transkrip.pdf');
 

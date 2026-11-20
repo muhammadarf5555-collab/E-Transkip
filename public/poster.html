@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Poster E-Transkrip Akademik - UIN Siber Syekh Nurjati Cirebon</title>
+<style>
+@page { size: 1400px 1980px; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --g900: #032b1f; --g800: #053d2c; --g700: #065f46; --g600: #047857; --g500: #059669; --g100: #d1fae5; --g50: #ecfdf5;
+  --gold: #d4a017; --gold2: #f1c232; --golddk: #a87b06;
+  --ink: #0f2a20; --muted: #4b5f57; --line: #dfe9e4; --bg: #f3f7f5;
+}
+html, body { width: 1400px; height: 1980px; }
+body { font-family: "Segoe UI", "Segoe UI Variable", Arial, sans-serif; color: var(--ink); background: var(--bg); -webkit-print-color-adjust: exact; print-color-adjust: exact; overflow: hidden; }
+.poster { width: 1400px; height: 1980px; display: flex; flex-direction: column; position: relative; }
+svg.i { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+b, strong { font-weight: 700; color: var(--ink); }
+
+/* HEADER */
+.top { height: 96px; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; border-bottom: 4px solid var(--gold); }
+.top-left { display: flex; align-items: center; gap: 18px; }
+.top-left img { height: 70px; }
+.vbar { width: 2px; height: 56px; background: var(--line); }
+.top-title { font-size: 21px; font-weight: 800; letter-spacing: .5px; color: var(--g700); }
+.top-sub { font-size: 13.5px; color: var(--muted); margin-top: 2px; }
+.top-right { display: flex; align-items: center; gap: 16px; text-align: right; }
+.top-right .k { font-size: 13px; font-weight: 800; color: var(--g700); letter-spacing: 1.5px; }
+.top-right .s { font-size: 12.5px; color: var(--muted); }
+.top-right img { height: 74px; }
+
+/* HERO */
+.hero { position: relative; height: 560px; background: linear-gradient(115deg, var(--g900) 0%, var(--g800) 40%, var(--g600) 100%); overflow: hidden; color: #fff; }
+.hero .bgimg { position: absolute; right: 0; top: 0; width: 62%; height: 100%; background: url('gedung.webp') center/cover; opacity: .22; -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%); mask-image: linear-gradient(90deg, transparent, #000 45%); }
+.hero .dots { position: absolute; left: -60px; bottom: -80px; width: 380px; height: 380px; border-radius: 50%; border: 60px solid rgba(212,160,23,.10); }
+.hero .ring { position: absolute; right: 120px; top: 70px; width: 470px; height: 470px; border-radius: 50%; background: radial-gradient(circle, rgba(241,194,50,.35) 0%, rgba(5,150,105,.15) 45%, transparent 70%); }
+.hero-in { position: relative; display: flex; height: 100%; padding: 40px 48px 36px; gap: 20px; }
+.hero-l { width: 760px; display: flex; flex-direction: column; }
+.badge { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 7px 14px; border-radius: 999px; background: rgba(255,255,255,.10); border: 1px solid rgba(241,194,50,.6); color: var(--gold2); }
+.badge svg.i { width: 15px; height: 15px; }
+.title { font-size: 86px; line-height: .95; font-weight: 900; letter-spacing: -1px; margin-top: 18px; text-transform: uppercase; }
+.title span { color: var(--gold2); display: block; }
+.subtitle { font-size: 22px; line-height: 1.35; margin-top: 16px; color: #e3f5ec; font-weight: 500; }
+.tag { align-self: flex-start; margin-top: 16px; display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(90deg, var(--gold), var(--gold2)); color: var(--g900); font-weight: 800; font-size: 16px; padding: 9px 18px; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+.tag svg.i { width: 19px; height: 19px; }
+.desc { margin-top: 18px; font-size: 15.5px; line-height: 1.6; color: #d7eee3; max-width: 730px; }
+.desc b { color: #fff; }
+.stats { display: flex; gap: 14px; margin-top: auto; }
+.stat { flex: 1; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 12px 16px; }
+.stat .n { font-size: 30px; font-weight: 900; color: var(--gold2); line-height: 1.05; }
+.stat .l { font-size: 13px; color: #d7eee3; margin-top: 2px; }
+.hero-r { flex: 1; position: relative; }
+.phone { position: absolute; filter: drop-shadow(0 26px 40px rgba(0,0,0,.45)); }
+.phone.p1 { left: 10px; top: 46px; width: 262px; transform: rotate(-6deg); }
+.phone.p2 { right: -6px; top: 6px; width: 300px; transform: rotate(4deg); }
+.float { position: absolute; background: #fff; color: var(--ink); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; box-shadow: 0 14px 30px rgba(0,0,0,.3); font-size: 13px; }
+.float .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--g50); color: var(--g600); }
+.float b { display: block; font-size: 14px; }
+.float small { color: var(--muted); font-size: 12px; }
+.float.f1 { left: -30px; bottom: 30px; }
+.float.f2 { right: 10px; bottom: 6px; }
+
+/* LAYOUT */
+.main { flex: 1; padding: 24px 48px 0; display: flex; flex-direction: column; gap: 20px; }
+.row { display: grid; gap: 20px; }
+.r3 { grid-template-columns: 1fr 1fr 1fr; }
+.card { background: #fff; border-radius: 18px; border: 1px solid var(--line); box-shadow: 0 6px 18px rgba(4,64,44,.06); padding: 20px 22px; position: relative; overflow: hidden; }
+.card::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--g600), var(--gold)); }
+.head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.num { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg, var(--g700), var(--g500)); color: #fff; font-weight: 900; font-size: 17px; flex-shrink: 0; box-shadow: 0 6px 14px rgba(4,120,87,.3); }
+.num.gold { background: linear-gradient(135deg, var(--golddk), var(--gold2)); color: var(--g900); }
+.kicker { font-size: 11.5px; font-weight: 800; letter-spacing: 1.6px; color: var(--golddk); text-transform: uppercase; }
+.h { font-size: 22px; font-weight: 800; color: var(--g800); line-height: 1.15; }
+ul.list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+ul.list li { display: flex; gap: 10px; font-size: 14px; line-height: 1.45; color: var(--muted); }
+ul.list li svg.i { width: 18px; height: 18px; margin-top: 1px; }
+ul.list.x li svg.i { color: #dc2626; }
+ul.list.v li svg.i { color: var(--g500); }
+.src { display: flex; flex-direction: column; gap: 10px; }
+.src .it { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: var(--g50); border: 1px solid #c9eedc; }
+.src .it:nth-child(2) { background: #fff8e6; border-color: #f3e2b0; }
+.src .it:nth-child(3) { background: #f1f5f9; border-color: #e2e8f0; }
+.src .ic { width: 36px; height: 36px; border-radius: 10px; background: #fff; display: grid; place-items: center; color: var(--g600); flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,.06); }
+.src .it:nth-child(2) .ic { color: var(--golddk); }
+.src .it:nth-child(3) .ic { color: #334155; }
+.src b { font-size: 14.5px; display: block; }
+.src span { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+/* SECTION TITLE */
+.st { display: flex; align-items: center; gap: 12px; }
+.st .ic { width: 40px; height: 40px; border-radius: 50%; background: var(--g700); color: var(--gold2); display: grid; place-items: center; }
+
+/* FLOW */
+.flow { position: relative; display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 14px; }
+.flow::before { content: ""; position: absolute; left: 6%; right: 6%; top: 32px; border-top: 3px dashed var(--gold); }
+.step { text-align: center; position: relative; }
+.step .circ { width: 64px; height: 64px; margin: 0 auto; border-radius: 50%; background: #fff; border: 3px solid var(--g600); display: grid; place-items: center; color: var(--g700); position: relative; box-shadow: 0 6px 14px rgba(4,120,87,.18); }
+.step .circ svg.i { width: 26px; height: 26px; }
+.step .circ i { position: absolute; top: -6px; right: -6px; width: 24px; height: 24px; border-radius: 50%; background: var(--gold); color: var(--g900); font-style: normal; font-weight: 900; font-size: 12px; display: grid; place-items: center; border: 2px solid #fff; }
+.step:last-child .circ { background: var(--g600); color: #fff; }
+.step b { display: block; font-size: 14.5px; margin-top: 10px; color: var(--g800); }
+.step span { display: block; font-size: 12.5px; color: var(--muted); line-height: 1.35; margin-top: 3px; padding: 0 4px; }
+
+/* STATUS BAND */
+.band { border-radius: 18px; padding: 20px 24px 22px; background: linear-gradient(110deg, var(--g900), var(--g700)); color: #fff; position: relative; overflow: hidden; }
+.band::after { content: ""; position: absolute; right: -80px; top: -120px; width: 320px; height: 320px; border-radius: 50%; border: 50px solid rgba(241,194,50,.08); }
+.band .h { color: #fff; }
+.band .kicker { color: var(--gold2); }
+.band-top { display: flex; align-items: center; justify-content: space-between; }
+.note { display: inline-flex; align-items: center; gap: 8px; background: var(--gold2); color: var(--g900); font-weight: 700; font-size: 13px; padding: 7px 14px; border-radius: 999px; }
+.note svg.i { width: 16px; height: 16px; }
+.stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 16px; position: relative; z-index: 1; }
+.stage { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 14px 16px; position: relative; }
+.stage .sn { font-size: 30px; font-weight: 900; color: var(--gold2); line-height: 1; }
+.stage b { color: #fff; font-size: 16px; display: block; margin-top: 6px; }
+.stage span { font-size: 13px; color: #cfe8dc; line-height: 1.4; display: block; margin-top: 4px; }
+.stage.final { background: linear-gradient(135deg, rgba(241,194,50,.28), rgba(255,255,255,.08)); border-color: var(--gold2); }
+.stage .arrow { position: absolute; right: -14px; top: 50%; transform: translateY(-50%); width: 14px; color: var(--gold2); }
+
+/* ROLES */
+.roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.role { background: #fff; border-radius: 18px; border: 1px solid var(--line); box-shadow: 0 6px 18px rgba(4,64,44,.06); overflow: hidden; }
+.role-h { display: flex; align-items: center; gap: 10px; padding: 12px 18px; color: #fff; background: linear-gradient(90deg, var(--g700), var(--g500)); }
+.role:nth-child(2) .role-h { background: linear-gradient(90deg, var(--golddk), var(--gold)); }
+.role:nth-child(3) .role-h { background: linear-gradient(90deg, #0f3d32, #1f6f5a); }
+.role-h b { color: #fff; font-size: 15.5px; letter-spacing: 1px; text-transform: uppercase; }
+.role-h small { margin-left: auto; font-size: 12px; opacity: .9; }
+.role-b { padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 10px; }
+.feat { display: flex; gap: 12px; align-items: flex-start; }
+.feat .ic { width: 38px; height: 38px; border-radius: 10px; background: var(--g50); color: var(--g600); display: grid; place-items: center; flex-shrink: 0; }
+.role:nth-child(2) .feat .ic { background: #fff8e6; color: var(--golddk); }
+.role:nth-child(3) .feat .ic { background: #eef4f2; color: #1f6f5a; }
+.feat .ic svg.i { width: 19px; height: 19px; }
+.feat b { font-size: 14.5px; display: block; }
+.feat span { font-size: 12.8px; color: var(--muted); line-height: 1.4; }
+
+/* BOTTOM */
+.bottom { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 20px; }
+.shot { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 8px 20px rgba(0,0,0,.08); }
+.shot .bar { height: 22px; background: #e7eeea; display: flex; align-items: center; gap: 6px; padding: 0 10px; }
+.shot .bar i { width: 9px; height: 9px; border-radius: 50%; background: #f87171; }
+.shot .bar i:nth-child(2) { background: #fbbf24; }
+.shot .bar i:nth-child(3) { background: #34d399; }
+.shot img { display: block; width: 100%; height: 205px; object-fit: cover; object-position: top; }
+.cap { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+.tech { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.tech .t { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 11px; border: 1px solid var(--line); background: #fafcfb; }
+.tech .t .ic { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: var(--g700); color: #fff; flex-shrink: 0; }
+.tech .t:nth-child(even) .ic { background: var(--gold); color: var(--g900); }
+.tech .t .ic svg.i { width: 17px; height: 17px; }
+.tech b { font-size: 13.5px; display: block; line-height: 1.2; }
+.tech span { font-size: 11.5px; color: var(--muted); }
+.adv { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.adv .a { border-radius: 13px; padding: 12px 13px; color: #fff; min-height: 116px; }
+.adv .a:nth-child(1) { background: linear-gradient(135deg, var(--g700), var(--g500)); }
+.adv .a:nth-child(2) { background: linear-gradient(135deg, var(--golddk), var(--gold)); }
+.adv .a:nth-child(3) { background: linear-gradient(135deg, #0f3d32, #1f6f5a); }
+.adv .a:nth-child(4) { background: linear-gradient(135deg, #b45309, #e0a526); }
+.adv .a svg.i { width: 24px; height: 24px; }
+.adv b { color: #fff; display: block; font-size: 15px; margin-top: 6px; }
+.adv span { font-size: 12.3px; opacity: .92; line-height: 1.35; display: block; margin-top: 2px; }
+
+/* FOOTER */
+.foot { margin-top: 22px; height: 78px; background: linear-gradient(90deg, var(--g900), var(--g700)); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; border-top: 4px solid var(--gold); }
+.foot .ft { font-size: 22px; font-weight: 800; }
+.foot .ft span { color: var(--gold2); }
+.foot .fs { font-size: 13px; color: #cfe8dc; margin-top: 2px; }
+.chips { display: flex; gap: 10px; }
+.chip { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.06); }
+.chip svg.i { width: 16px; height: 16px; color: var(--gold2); }
+</style>
+</head>
+<body>
+<div id="no-print-bar" style="position:fixed;top:16px;right:20px;z-index:99999;display:flex;gap:12px;box-shadow:0 10px 25px rgba(0,0,0,0.3);background:#032b1f;padding:12px 20px;border-radius:14px;border:1px solid #d4a017;">
+  <button onclick="window.print()" style="cursor:pointer;background:linear-gradient(135deg,#d4a017,#f1c232);color:#032b1f;font-weight:800;border:none;padding:10px 22px;border-radius:10px;font-size:15px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+    🖨️ Cetak / Simpan PDF (A4)
+  </button>
+</div>
+<style>
+@media print {
+  #no-print-bar { display: none !important; }
+  @page { size: A4 portrait; margin: 0; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .poster { width: 100% !important; height: 100vh !important; }
+}
+</style>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <g id="i-user"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></g>
+    <g id="i-users"><circle cx="9" cy="7" r="4"/><path d="M2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1"/><path d="M16 3.1a4 4 0 0 1 0 7.8M22 21v-1a6 6 0 0 0-4-5.7"/></g>
+    <g id="i-login"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></g>
+    <g id="i-sync"><path d="M21 12a9 9 0 0 1-15.5 6.3L3 16"/><path d="M3 12a9 9 0 0 1 15.5-6.3L21 8"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/></g>
+    <g id="i-calc"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18h8"/></g>
+    <g id="i-shield"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></g>
+    <g id="i-award"><circle cx="12" cy="8" r="6"/><path d="M15.5 13 17 22l-5-3-5 3 1.5-9"/></g>
+    <g id="i-file"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></g>
+    <g id="i-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></g>
+    <g id="i-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></g>
+    <g id="i-qr"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></g>
+    <g id="i-alert"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></g>
+    <g id="i-target"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></g>
+    <g id="i-link"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></g>
+    <g id="i-edit"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></g>
+    <g id="i-bell"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></g>
+    <g id="i-list"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></g>
+    <g id="i-sliders"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></g>
+    <g id="i-grad"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></g>
+    <g id="i-building"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></g>
+    <g id="i-zap"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></g>
+    <g id="i-lock"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></g>
+    <g id="i-phone"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></g>
+    <g id="i-eye"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g>
+    <g id="i-code"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></g>
+    <g id="i-star"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></g>
+    <g id="i-layers"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></g>
+    <g id="i-db"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></g>
+    <g id="i-sheet"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></g>
+    <g id="i-check"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></g>
+    <g id="i-x"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></g>
+    <g id="i-chev"><path d="M5 4l8 8-8 8"/></g>
+    <g id="i-undo"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></g>
+    <g id="i-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></g>
+    <g id="i-history"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></g>
+    <g id="i-globe"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></g>
+  </defs>
+</svg>
+
+<div class="poster">
+  <!-- HEADER -->
+  <div class="top">
+    <div class="top-left">
+      <img src="logo-uinssc.png" alt="UINSSC">
+      <div class="vbar"></div>
+      <div>
+        <div class="top-title">PUSTIKOM · UIN SIBER SYEKH NURJATI CIREBON</div>
+        <div class="top-sub">Portal Resmi Penerbitan &amp; Verifikasi Transkrip Akademik Digital</div>
+      </div>
+    </div>
+    <div class="top-right">
+      <div>
+        <div class="k">INOVASI DIGITAL</div>
+        <div class="s">Islam, Science, and Society</div>
+      </div>
+      <img src="logo-aicis.png" alt="AICIS+ 2026">
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="bgimg"></div>
+    <div class="dots"></div>
+    <div class="ring"></div>
+    <div class="hero-in">
+      <div class="hero-l">
+        <div class="badge"><svg class="i"><use href="#i-globe"/></svg> Aplikasi Web · Responsif Desktop &amp; Mobile</div>
+        <div class="title">E-Transkrip<span>Akademik</span></div>
+        <div class="subtitle">Sistem Informasi Penerbitan &amp; Verifikasi Transkrip Nilai Digital<br>UIN Siber Syekh Nurjati Cirebon</div>
+        <div class="tag"><svg class="i"><use href="#i-shield"/></svg> Transkrip Resmi, Valid &amp; Terverifikasi QR Code</div>
+        <p class="desc"><b>E-Transkrip Akademik</b> adalah aplikasi web yang mendigitalisasi seluruh proses penerbitan transkrip nilai — mulai dari <b>sinkronisasi nilai dari SIAKAD</b>, perhitungan <b>IPK &amp; predikat otomatis</b>, verifikasi berjenjang oleh <b>Admin Fakultas</b> dan <b>Super Admin</b>, hingga terbit <b>dokumen PDF A4 resmi ber-QR Code</b> yang keasliannya dapat dicek oleh siapa pun.</p>
+        <div class="stats">
+          <div class="stat"><div class="n">3</div><div class="l">Peran Pengguna</div></div>
+          <div class="stat"><div class="n">4</div><div class="l">Tahap Validasi</div></div>
+          <div class="stat"><div class="n">QR</div><div class="l">Verifikasi Publik</div></div>
+          <div class="stat"><div class="n">A4</div><div class="l">PDF Resmi Otomatis</div></div>
+        </div>
+      </div>
+      <div class="hero-r">
+        <img class="phone p1" src="hp-login.png" alt="Halaman Login">
+        <img class="phone p2" src="hp-dashboard.png" alt="Dashboard Mahasiswa">
+        <div class="float f1"><div class="ic"><svg class="i"><use href="#i-qr"/></svg></div><div><b>Transkrip Terverifikasi</b><small>Scan QR → cek keaslian</small></div></div>
+        <div class="float f2"><div class="ic"><svg class="i"><use href="#i-sync"/></svg></div><div><b>Sinkron SIAKAD</b><small>Bridge API UINSSC</small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- ROW 1 -->
+    <div class="row r3">
+      <div class="card">
+        <div class="head"><div class="num">01</div><div><div class="kicker">Latar Belakang</div><div class="h">Permasalahan</div></div></div>
+        <ul class="list x">
+          <li><svg class="i"><use href="#i-x"/></svg><span>Pengurusan transkrip masih <b>manual</b>: datang ke fakultas, antre &amp; menunggu berhari-hari.</span></li>
+          <li><svg class="i"><use href="#i-x"/></svg><span>Rekap nilai tersebar di banyak berkas, <b>rawan salah ketik</b> &amp; salah hitung IPK.</span></li>
+          <li><svg class="i"><use href="#i-x"/></svg><span><b>Sulit membedakan</b> transkrip asli dengan transkrip yang dipalsukan.</span></li>
+          <li><svg class="i"><use href="#i-x"/></svg><span>Mahasiswa <b>tidak tahu status</b> proses pengesahan transkripnya.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="head"><div class="num gold">02</div><div><div class="kicker">Solusi</div><div class="h">Fungsi &amp; Tujuan</div></div></div>
+        <ul class="list v">
+          <li><svg class="i"><use href="#i-check"/></svg><span><b>Digitalisasi</b> penerbitan transkrip — diakses kapan saja &amp; di mana saja.</span></li>
+          <li><svg class="i"><use href="#i-check"/></svg><span><b>Otomatisasi</b> perhitungan SKS, IPK &amp; predikat sesuai aturan bobot nilai.</span></li>
+          <li><svg class="i"><use href="#i-check"/></svg><span><b>Anti pemalsuan</b> — setiap dokumen memiliki kode QR verifikasi publik.</span></li>
+          <li><svg class="i"><use href="#i-check"/></svg><span><b>Transparan</b> — status validasi &amp; notifikasi terpantau langsung.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="head"><div class="num">03</div><div><div class="kicker">Integrasi Data</div><div class="h">Sumber Data Terpadu</div></div></div>
+        <div class="src">
+          <div class="it"><div class="ic"><svg class="i"><use href="#i-link"/></svg></div><div><b>SIAKAD Bridge API</b><span>Sinkron otomatis fakultas, prodi, mahasiswa, mata kuliah &amp; nilai.</span></div></div>
+          <div class="it"><div class="ic"><svg class="i"><use href="#i-grad"/></svg></div><div><b>e-Wisuda UINSSC</b><span>Data wisudawan, judul skripsi &amp; tanggal kelulusan.</span></div></div>
+          <div class="it"><div class="ic"><svg class="i"><use href="#i-sheet"/></svg></div><div><b>Import Excel</b><span>Unggah massal mahasiswa, nilai &amp; wisudawan via template.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW -->
+    <div class="card">
+      <div class="st"><div class="ic"><svg class="i"><use href="#i-layers"/></svg></div><div><div class="kicker">Cara Kerja</div><div class="h">Alur Penggunaan Aplikasi</div></div></div>
+      <div class="flow">
+        <div class="step"><div class="circ"><svg class="i"><use href="#i-login"/></svg><i>1</i></div><b>Login</b><span>Admin dengan email, mahasiswa dengan NIM.</span></div>
+        <div class="step"><div class="circ"><svg class="i"><use href="#i-sync"/></svg><i>2</i></div><b>Sinkronisasi</b><span>Nilai ditarik dari SIAKAD &amp; e-Wisuda.</span></div>
+        <div class="step"><div class="circ"><svg class="i"><use href="#i-calc"/></svg><i>3</i></div><b>Hitung Otomatis</b><span>SKS, IPK &amp; predikat dihitung sistem.</span></div>
+        <div class="step"><div class="circ"><svg class="i"><use href="#i-building"/></svg><i>4</i></div><b>Verifikasi Fakultas</b><span>Admin Fakultas memeriksa &amp; memvalidasi.</span></div>
+        <div class="step"><div class="circ"><svg class="i"><use href="#i-award"/></svg><i>5</i></div><b>Pengesahan</b><span>Super Admin mengesahkan transkrip.</span></div>
+        <div class="step"><div class="circ"><svg class="i"><use href="#i-file"/></svg><i>6</i></div><b>Terbit PDF A4</b><span>Dokumen resmi + tanda tangan &amp; QR.</span></div>
+        <div class="step"><div class="circ"><svg class="i"><use href="#i-download"/></svg><i>7</i></div><b>Unduh</b><span>Mahasiswa mengunduh transkripnya.</span></div>
+        <div class="step"><div class="circ"><svg class="i"><use href="#i-qr"/></svg><i>8</i></div><b>Verifikasi QR</b><span>Siapa pun bisa cek keaslian dokumen.</span></div>
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <div class="band">
+      <div class="band-top">
+        <div class="st"><div class="ic" style="background:rgba(255,255,255,.12)"><svg class="i"><use href="#i-shield"/></svg></div><div><div class="kicker">Transparan &amp; Berjenjang</div><div class="h">4 Tahap Status Validasi Transkrip</div></div></div>
+        <div class="note"><svg class="i"><use href="#i-undo"/></svg> Ditolak / Perlu Perbaikan → dikembalikan dengan catatan</div>
+      </div>
+      <div class="stages">
+        <div class="stage"><div class="sn">01</div><b>Draft</b><span>Nilai tersinkron, transkrip otomatis disusun oleh sistem.</span><svg class="i arrow"><use href="#i-chev"/></svg></div>
+        <div class="stage"><div class="sn">02</div><b>Menunggu Validasi</b><span>Masuk antrean pemeriksaan Admin Fakultas.</span><svg class="i arrow"><use href="#i-chev"/></svg></div>
+        <div class="stage"><div class="sn">03</div><b>Terverifikasi</b><span>Lolos verifikasi fakultas, menunggu pengesahan Super Admin.</span><svg class="i arrow"><use href="#i-chev"/></svg></div>
+        <div class="stage final"><div class="sn">04</div><b>Valid / Disahkan</b><span>Transkrip resmi terbit &amp; siap diunduh mahasiswa.</span></div>
+      </div>
+    </div>
+
+    <!-- ROLES -->
+    <div>
+      <div class="st" style="margin-bottom:12px"><div class="ic"><svg class="i"><use href="#i-users"/></svg></div><div><div class="kicker">Panduan Pengguna</div><div class="h">Fitur Berdasarkan Peran</div></div></div>
+      <div class="roles">
+        <div class="role">
+          <div class="role-h"><svg class="i"><use href="#i-shield"/></svg><b>Super Admin</b><small>Pustikom / Universitas</small></div>
+          <div class="role-b">
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-award"/></svg></div><div><b>Pengesahan Transkrip</b><span>Ratifikasi akhir transkrip dari seluruh fakultas.</span></div></div>
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-users"/></svg></div><div><b>Kelola Admin Fakultas</b><span>Buat akun, setujui permintaan, aktif/nonaktifkan.</span></div></div>
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-sliders"/></svg></div><div><b>Aturan Bobot Nilai</b><span>Atur konversi nilai huruf ke bobot (A = 4.00, dst).</span></div></div>
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-list"/></svg></div><div><b>Monitoring &amp; Audit Log</b><span>Pantau mahasiswa, wisudawan &amp; seluruh aktivitas.</span></div></div>
+          </div>
+        </div>
+        <div class="role">
+          <div class="role-h"><svg class="i"><use href="#i-building"/></svg><b>Admin Fakultas</b><small>Operator Akademik</small></div>
+          <div class="role-b">
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-sync"/></svg></div><div><b>Sinkronisasi SIAKAD</b><span>Fakultas, prodi, mata kuliah, mahasiswa &amp; nilai.</span></div></div>
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-edit"/></svg></div><div><b>Input Nilai Manual &amp; Massal</b><span>Dengan deteksi konflik &amp; riwayat perubahan nilai.</span></div></div>
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-shield"/></svg></div><div><b>Validasi Transkrip</b><span>Periksa, setujui, atau kembalikan dengan catatan.</span></div></div>
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-history"/></svg></div><div><b>Proses Pengajuan Koreksi</b><span>Tindak lanjuti laporan koreksi dari mahasiswa.</span></div></div>
+          </div>
+        </div>
+        <div class="role">
+          <div class="role-h"><svg class="i"><use href="#i-grad"/></svg><b>Mahasiswa</b><small>Login dengan NIM</small></div>
+          <div class="role-b">
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-eye"/></svg></div><div><b>Transkrip Saya</b><span>Lihat IPK, total SKS, predikat &amp; daftar nilai lengkap.</span></div></div>
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-download"/></svg></div><div><b>Unduh PDF Resmi</b><span>Transkrip A4 ber-QR Code setelah disahkan.</span></div></div>
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-edit"/></svg></div><div><b>Pengajuan Koreksi</b><span>Laporkan nilai atau data yang keliru secara online.</span></div></div>
+            <div class="feat"><div class="ic"><svg class="i"><use href="#i-bell"/></svg></div><div><b>Notifikasi</b><span>Kabar setiap perubahan status transkrip.</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="bottom">
+      <div class="card">
+        <div class="head"><div class="num">04</div><div><div class="kicker">Tampilan Aplikasi</div><div class="h">Dashboard Mahasiswa</div></div></div>
+        <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img src="desktop-dashboard.jpg" alt="Dashboard"></div>
+        <div class="cap">Profil akademik &amp; daftar nilai terintegrasi SIAKAD, dilengkapi paginasi &amp; mode gelap.</div>
+      </div>
+      <div class="card">
+        <div class="head"><div class="num gold">05</div><div><div class="kicker">Teknologi</div><div class="h">Dibangun Dengan</div></div></div>
+        <div class="tech">
+          <div class="t"><div class="ic"><svg class="i"><use href="#i-code"/></svg></div><div><b>Laravel 13</b><span>Backend &amp; MVC</span></div></div>
+          <div class="t"><div class="ic"><svg class="i"><use href="#i-layers"/></svg></div><div><b>Tailwind CSS</b><span>UI responsif</span></div></div>
+          <div class="t"><div class="ic"><svg class="i"><use href="#i-zap"/></svg></div><div><b>Alpine.js</b><span>Interaksi dinamis</span></div></div>
+          <div class="t"><div class="ic"><svg class="i"><use href="#i-file"/></svg></div><div><b>DomPDF</b><span>Cetak PDF A4</span></div></div>
+          <div class="t"><div class="ic"><svg class="i"><use href="#i-qr"/></svg></div><div><b>Simple QrCode</b><span>QR verifikasi</span></div></div>
+          <div class="t"><div class="ic"><svg class="i"><use href="#i-sheet"/></svg></div><div><b>Laravel Excel</b><span>Import / export</span></div></div>
+          <div class="t"><div class="ic"><svg class="i"><use href="#i-link"/></svg></div><div><b>REST API Bridge</b><span>SIAKAD &amp; e-Wisuda</span></div></div>
+          <div class="t"><div class="ic"><svg class="i"><use href="#i-lock"/></svg></div><div><b>Role-Based Access</b><span>Hak akses per peran</span></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="head"><div class="num">06</div><div><div class="kicker">Nilai Lebih</div><div class="h">Keunggulan</div></div></div>
+        <div class="adv">
+          <div class="a"><svg class="i"><use href="#i-shield"/></svg><b>Valid &amp; Anti Palsu</b><span>QR Code terhubung ke halaman verifikasi resmi.</span></div>
+          <div class="a"><svg class="i"><use href="#i-zap"/></svg><b>Cepat &amp; Otomatis</b><span>IPK &amp; predikat dihitung tanpa input ulang.</span></div>
+          <div class="a"><svg class="i"><use href="#i-eye"/></svg><b>Transparan</b><span>Riwayat status &amp; audit log tercatat lengkap.</span></div>
+          <div class="a"><svg class="i"><use href="#i-phone"/></svg><b>Responsif</b><span>Nyaman di HP, tablet &amp; desktop + dark mode.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div>
+      <div class="ft">E-Transkrip <span>Akademik</span> — Transkrip Resmi dalam Genggaman</div>
+      <div class="fs">PUSTIKOM · UIN Siber Syekh Nurjati Cirebon · AICIS+ 2026</div>
+    </div>
+    <div class="chips">
+      <div class="chip"><svg class="i"><use href="#i-globe"/></svg> Web Responsif</div>
+      <div class="chip"><svg class="i"><use href="#i-qr"/></svg> QR Verified</div>
+      <div class="chip"><svg class="i"><use href="#i-grad"/></svg> UINSSC</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

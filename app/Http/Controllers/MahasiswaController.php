@@ -7,6 +7,7 @@ use App\Models\Fakultas;
 use App\Models\Mahasiswa;
 use App\Models\ProgramStudi;
 use App\Models\User;
+use App\Services\SiakadApiService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +16,10 @@ use Illuminate\View\View;
 
 class MahasiswaController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request, SiakadApiService $siakadApi): View
     {
+        $siakadApi->ensureCleanOfficialDataset();
+
         $user = Auth::user();
         $query = Mahasiswa::with(['fakultas', 'programStudi', 'transkrip', 'wisudawan']);
 
@@ -260,5 +263,40 @@ class MahasiswaController extends Controller
         AuditLog::record('Menghapus Mahasiswa', 'Mahasiswa', (string) $id, "Menghapus mahasiswa dan user akun: {$nim}");
 
         return redirect()->route('admin.mahasiswa.index')->with('success', 'Mahasiswa berhasil dihapus.');
+    }
+
+    /**
+     * Tarik Data Mahasiswa & Seluruh Nilai KHS langsung dari SIAKAD Bridge API berdasarkan NIM.
+     */
+    public function syncSiakad(Request $request, SiakadApiService $siakadApi): RedirectResponse
+    {
+        $user = Auth::user();
+        $nimsInput = trim((string) $request->input('nims', '2388010017'));
+        if ($nimsInput === '') {
+            $nimsInput = '2388010017';
+        }
+
+        $nimList = array_values(array_unique(array_filter(array_map('trim', preg_split('/[\s,;]+/', $nimsInput) ?: []))));
+        $syncedNames = [];
+
+        foreach ($nimList as $nim) {
+            $mhs = $siakadApi->syncStudentFromSiakadByNim($nim);
+            if ($mhs) {
+                $syncedNames[] = "{$mhs->nama} ({$mhs->nim})";
+            }
+        }
+
+        $count = count($syncedNames);
+        $namesStr = implode(', ', $syncedNames);
+
+        AuditLog::record(
+            'Sinkronisasi Mahasiswa & Nilai SIAKAD API',
+            'Mahasiswa',
+            'SIAKAD_API',
+            "{$user->name} menarik {$count} data mahasiswa & nilai dari SIAKAD Bridge API: {$namesStr}"
+        );
+
+        return redirect()->route('admin.mahasiswa.index')
+            ->with('success', "Berhasil menarik {$count} data mahasiswa & transkrip nilai dari SIAKAD API: {$namesStr}.");
     }
 }

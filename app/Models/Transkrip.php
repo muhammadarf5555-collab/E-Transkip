@@ -26,6 +26,11 @@ class Transkrip extends Model
         'ratified_by_admin_id',
         'ratified_by_admin_at',
         'kode_verifikasi',
+        'nomor_transkrip',
+        'no_sk_banpt_override',
+        'nama_dekan_override',
+        'nip_dekan_override',
+        'jabatan_dekan_override',
         'catatan',
     ];
 

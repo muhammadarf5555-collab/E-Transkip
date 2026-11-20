@@ -26,8 +26,10 @@ class SuperAdminController extends Controller
     /**
      * Display Super Admin Executive & Monitoring Dashboard.
      */
-    public function dashboard(Request $request): View
+    public function dashboard(Request $request, SiakadApiService $siakadApi): View
     {
+        $siakadApi->ensureCleanOfficialDataset();
+
         $stats = [
             'total_fakultas' => Fakultas::count(),
             'total_prodi' => ProgramStudi::count(),

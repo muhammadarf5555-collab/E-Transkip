@@ -105,6 +105,8 @@ class ProgramStudiController extends Controller
             'sks_tempuh' => ['nullable', 'integer', 'min:1'],
             'gelar_akademik' => ['nullable', 'string', 'max:50'],
             'gelar_akademik_full' => ['nullable', 'string', 'max:150'],
+            'no_sk_akreditasi' => ['nullable', 'string', 'max:255'],
+            'peringkat_akreditasi' => ['nullable', 'string', 'max:50'],
         ]);
 
         if ($user->isAdminFakultas() && $user->fakultas_id) {
@@ -136,6 +138,8 @@ class ProgramStudiController extends Controller
             'sks_tempuh' => ['nullable', 'integer', 'min:1'],
             'gelar_akademik' => ['nullable', 'string', 'max:50'],
             'gelar_akademik_full' => ['nullable', 'string', 'max:150'],
+            'no_sk_akreditasi' => ['nullable', 'string', 'max:255'],
+            'peringkat_akreditasi' => ['nullable', 'string', 'max:50'],
         ]);
 
         if ($user->isAdminFakultas() && $user->fakultas_id) {

@@ -13,14 +13,18 @@ class SyncAllInformatikaCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'bridge:sync-all-infor {--force : Paksa tarik ulang seluruh nilai dari Bridge API}';
+    protected $signature = 'bridge:sync-all-infor
+                            {--force : Paksa tarik ulang seluruh nilai dari Bridge API}
+                            {--all : Tarik nilai untuk seluruh mahasiswa yang masih 0 SKS di semua prodi}
+                            {--fakultas= : Filter berdasarkan ID fakultas (misal 1 untuk FITK)}
+                            {--limit=50 : Batas jumlah mahasiswa per eksekusi agar cepat}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Sinkronkan transkrip nilai resmi seluruh mahasiswa Teknik Informatika dari Bridge API';
+    protected $description = 'Sinkronkan transkrip nilai resmi mahasiswa langsung dari Bridge API UINSSC';
 
     /**
      * Execute the console command.
@@ -28,12 +32,29 @@ class SyncAllInformatikaCommand extends Command
     public function handle(SiakadApiService $service): int
     {
         $force = (bool) $this->option('force');
-        $students = Mahasiswa::where('nim', 'like', '238801%')
-            ->orderBy('nim')
-            ->get();
+        $all = (bool) $this->option('all');
+        $fakultasId = $this->option('fakultas');
+        $limit = (int) ($this->option('limit') ?: 50);
+
+        $query = Mahasiswa::with('transkrip');
+
+        if (! $all && ! $fakultasId) {
+            $query->where('nim', 'like', '238801%');
+        } elseif ($fakultasId) {
+            $query->where('fakultas_id', (int) $fakultasId);
+        }
+
+        if (! $force) {
+            $query->where(function ($q) {
+                $q->whereDoesntHave('transkrip')
+                    ->orWhereHas('transkrip', fn ($t) => $t->where('total_sks', 0));
+            });
+        }
+
+        $students = $query->orderBy('nim')->take($limit)->get();
 
         $total = $students->count();
-        $this->info("Menemukan {$total} mahasiswa Teknik Informatika.");
+        $this->info("Menemukan {$total} mahasiswa yang akan ditarik nilainya dari Bridge API UINSSC...");
 
         $bar = $this->output->createProgressBar($total);
         $bar->start();

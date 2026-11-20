@@ -14,6 +14,8 @@ class FakultasController extends Controller
 {
     public function index(SiakadApiService $siakadApi): View
     {
+        $siakadApi->ensureCleanOfficialDataset();
+
         $user = Auth::user();
         $query = Fakultas::withCount(['programStudis', 'mahasiswas'])
             ->orderByRaw('CASE WHEN kode_fakultas IS NULL THEN 1 ELSE 0 END, kode_fakultas ASC, nama_fakultas ASC');
@@ -64,13 +66,20 @@ class FakultasController extends Controller
             'kode_fakultas' => ['nullable', 'integer', 'unique:fakultas,kode_fakultas'],
             'nama_fakultas' => ['required', 'string', 'max:255', 'unique:fakultas,nama_fakultas'],
             'nama_fakultas_singkat' => ['nullable', 'string', 'max:50'],
+            'kode_romawi' => ['nullable', 'string', 'max:30'],
+            'nama_dekan' => ['nullable', 'string', 'max:255'],
+            'nip_dekan' => ['nullable', 'string', 'max:50'],
+            'jabatan_dekan' => ['nullable', 'string', 'max:100'],
+            'no_sk_banpt' => ['nullable', 'string', 'max:255'],
         ]);
+
+        $validated['jabatan_dekan'] = $validated['jabatan_dekan'] ?: 'Dekan';
 
         $fakultas = Fakultas::create($validated);
 
-        AuditLog::record('Menambah Fakultas', 'Fakultas', (string) $fakultas->id, "Menambahkan fakultas: {$fakultas->nama_fakultas}");
+        AuditLog::record('Menambah Fakultas', 'Fakultas', (string) $fakultas->id, "Menambahkan fakultas: {$fakultas->nama_fakultas} (Dekan: {$fakultas->nama_dekan})");
 
-        return redirect()->route('admin.fakultas.index')->with('success', 'Fakultas berhasil ditambahkan.');
+        return redirect()->route('admin.fakultas.index')->with('success', 'Fakultas dan data pejabat penandatangan berhasil ditambahkan.');
     }
 
     public function update(Request $request, Fakultas $fakultas): RedirectResponse
@@ -84,13 +93,20 @@ class FakultasController extends Controller
             'kode_fakultas' => ['nullable', 'integer', 'unique:fakultas,kode_fakultas,'.$fakultas->id],
             'nama_fakultas' => ['required', 'string', 'max:255', 'unique:fakultas,nama_fakultas,'.$fakultas->id],
             'nama_fakultas_singkat' => ['nullable', 'string', 'max:50'],
+            'kode_romawi' => ['nullable', 'string', 'max:30'],
+            'nama_dekan' => ['nullable', 'string', 'max:255'],
+            'nip_dekan' => ['nullable', 'string', 'max:50'],
+            'jabatan_dekan' => ['nullable', 'string', 'max:100'],
+            'no_sk_banpt' => ['nullable', 'string', 'max:255'],
         ]);
+
+        $validated['jabatan_dekan'] = $validated['jabatan_dekan'] ?: 'Dekan';
 
         $fakultas->update($validated);
 
-        AuditLog::record('Memperbarui Fakultas', 'Fakultas', (string) $fakultas->id, "Memperbarui nama fakultas menjadi: {$fakultas->nama_fakultas}");
+        AuditLog::record('Memperbarui Fakultas & Pejabat', 'Fakultas', (string) $fakultas->id, "Memperbarui fakultas {$fakultas->nama_fakultas} (Pejabat: {$fakultas->jabatan_dekan} - {$fakultas->nama_dekan}, NIP: {$fakultas->nip_dekan})");
 
-        return redirect()->route('admin.fakultas.index')->with('success', 'Fakultas berhasil diperbarui.');
+        return redirect()->route('admin.fakultas.index')->with('success', 'Data fakultas dan pejabat penandatangan berhasil diperbarui secara dinamis.');
     }
 
     public function destroy(Fakultas $fakultas): RedirectResponse

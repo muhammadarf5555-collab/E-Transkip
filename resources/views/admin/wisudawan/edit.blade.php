@@ -137,19 +137,44 @@
                 </div>
             </div>
 
+            <!-- Tempat & Tanggal Lahir + Nomor Transkrip & SK BAN-PT -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 rounded-xl bg-emerald-50/50 dark:bg-gray-900/50 border border-emerald-200 dark:border-gray-700">
+                <div>
+                    <x-input-label for="tempat_lahir" value="Tempat Lahir (Untuk Transkrip)" />
+                    <x-text-input id="tempat_lahir" name="tempat_lahir" type="text" class="mt-1 block w-full text-sm" value="{{ old('tempat_lahir', $wisudawan->mahasiswa?->tempat_lahir ?: 'Cirebon') }}" />
+                </div>
+                <div>
+                    <x-input-label for="tanggal_lahir" value="Tanggal Lahir" />
+                    <x-text-input id="tanggal_lahir" name="tanggal_lahir" type="date" class="mt-1 block w-full text-sm" value="{{ old('tanggal_lahir', $wisudawan->mahasiswa?->tanggal_lahir?->format('Y-m-d')) }}" />
+                </div>
+                <div>
+                    <x-input-label for="nomor_transkrip" value="Nomor Surat Transkrip (Opsional)" />
+                    <x-text-input id="nomor_transkrip" name="nomor_transkrip" type="text" class="mt-1 block w-full text-sm font-mono" value="{{ old('nomor_transkrip', $wisudawan->transkrip?->nomor_transkrip) }}" placeholder="Otomatis jika dikosongkan" />
+                </div>
+                <div>
+                    <x-input-label for="no_sk_banpt_override" value="Nomor SK BAN-PT / LAM" />
+                    <x-text-input id="no_sk_banpt_override" name="no_sk_banpt_override" type="text" class="mt-1 block w-full text-sm font-mono" value="{{ old('no_sk_banpt_override', $wisudawan->transkrip?->no_sk_banpt_override) }}" placeholder="Otomatis sesuai Fakultas/Prodi" />
+                </div>
+            </div>
+
             <!-- Judul Skripsi -->
             <div>
                 <x-input-label for="judul_skripsi" value="Judul Tugas Akhir / Skripsi" />
                 <textarea id="judul_skripsi" name="judul_skripsi" rows="3" class="mt-1 block w-full text-sm rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-emerald-500 focus:ring-emerald-500">{{ old('judul_skripsi', $wisudawan->judul_skripsi) }}</textarea>
             </div>
 
-            <div class="pt-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
-                <a href="{{ route('admin.wisudawan.index') }}" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-xl transition">
-                    Batal
-                </a>
-                <x-primary-button class="py-2.5 px-6">
-                    Simpan Perubahan
-                </x-primary-button>
+            <div class="pt-6 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <span class="text-xs text-emerald-700 dark:text-emerald-400 font-medium">
+                    ✓ Perubahan data di sini otomatis tersinkron ke Berkas Transkrip mahasiswa.
+                </span>
+                <div class="flex justify-end gap-3">
+                    <a href="{{ route('admin.wisudawan.index') }}" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-xl transition">
+                        Batal
+                    </a>
+                    <x-primary-button class="py-2.5 px-6">
+                        Simpan Perubahan &amp; Sinkronkan Transkrip
+                    </x-primary-button>
+                </div>
             </div>
         </form>
     </div>

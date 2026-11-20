@@ -68,7 +68,7 @@ class PengajuanKoreksiController extends Controller
         $user = Auth::user();
         $mahasiswa = $user->mahasiswa;
 
-        if (! $mahasiswa) {
+        if (!$mahasiswa) {
             abort(403, 'Hanya mahasiswa terdaftar yang dapat mengajukan koreksi.');
         }
 
@@ -77,8 +77,23 @@ class PengajuanKoreksiController extends Controller
             'mata_kuliah_id' => ['nullable', 'exists:siakad_mata_kuliahs,id'],
             'nilai_lama' => ['nullable', 'string', 'max:5'],
             'nilai_diajukan' => ['nullable', 'string', 'max:5'],
-            'alasan' => ['required', 'string', 'max:1000'],
+            'alasan' => ['nullable', 'string', 'max:1500'],
             'dokumen' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:3072'],
+            // Biodata
+            'nama_diajukan' => ['nullable', 'string', 'max:150'],
+            'tempat_lahir_diajukan' => ['nullable', 'string', 'max:100'],
+            'tanggal_lahir_diajukan' => ['nullable', 'date'],
+            'jenis_kelamin_diajukan' => ['nullable', 'in:L,P'],
+            'nik_diajukan' => ['nullable', 'string', 'max:20'],
+            // Ijazah & SK
+            'no_ijazah_diajukan' => ['nullable', 'string', 'max:100'],
+            'no_sk_diajukan' => ['nullable', 'string', 'max:100'],
+            'tanggal_sk_diajukan' => ['nullable', 'date'],
+            'tanggal_ijazah_diajukan' => ['nullable', 'date'],
+            // Skripsi & Wisuda
+            'judul_skripsi_diajukan' => ['nullable', 'string', 'max:500'],
+            'judul_skripsi_en_diajukan' => ['nullable', 'string', 'max:500'],
+            'periode_wisuda_diajukan' => ['nullable', 'string', 'max:100'],
         ]);
 
         $dokumenPath = null;
@@ -94,6 +109,53 @@ class PengajuanKoreksiController extends Controller
             $siakadNilaiId = $siakadNilai?->id;
         }
 
+        // Susun rincian per kategori secara otomatis dan terstruktur
+        $alasanFinal = $request->alasan ?: '-';
+
+        if ($request->jenis_koreksi === 'Koreksi Biodata / Data Pribadi') {
+            $rincian = [];
+            if ($request->filled('nama_diajukan'))
+                $rincian[] = "• Nama Baru: " . trim($request->nama_diajukan);
+            if ($request->filled('tempat_lahir_diajukan'))
+                $rincian[] = "• Tempat Lahir: " . trim($request->tempat_lahir_diajukan);
+            if ($request->filled('tanggal_lahir_diajukan'))
+                $rincian[] = "• Tanggal Lahir: " . trim($request->tanggal_lahir_diajukan);
+            if ($request->filled('jenis_kelamin_diajukan'))
+                $rincian[] = "• Jenis Kelamin: " . ($request->jenis_kelamin_diajukan === 'L' ? 'Laki-laki (L)' : 'Perempuan (P)');
+            if ($request->filled('nik_diajukan'))
+                $rincian[] = "• NIK KTP: " . trim($request->nik_diajukan);
+
+            if (!empty($rincian)) {
+                $alasanFinal = "[KOREKSI BIODATA DIAJUKAN]\n" . implode("\n", $rincian) . ($request->filled('alasan') ? "\n\nCatatan/Alasan:\n" . $request->alasan : '');
+            }
+        } elseif ($request->jenis_koreksi === 'Koreksi Nomor Ijazah / SK') {
+            $rincian = [];
+            if ($request->filled('no_ijazah_diajukan'))
+                $rincian[] = "• No. Ijazah Baru: " . trim($request->no_ijazah_diajukan);
+            if ($request->filled('no_sk_diajukan'))
+                $rincian[] = "• No. SK Yudisium Baru: " . trim($request->no_sk_diajukan);
+            if ($request->filled('tanggal_sk_diajukan'))
+                $rincian[] = "• Tanggal SK: " . trim($request->tanggal_sk_diajukan);
+            if ($request->filled('tanggal_ijazah_diajukan'))
+                $rincian[] = "• Tanggal Ijazah: " . trim($request->tanggal_ijazah_diajukan);
+
+            if (!empty($rincian)) {
+                $alasanFinal = "[KOREKSI NO IJAZAH & SK DIAJUKAN]\n" . implode("\n", $rincian) . ($request->filled('alasan') ? "\n\nCatatan/Alasan:\n" . $request->alasan : '');
+            }
+        } elseif ($request->jenis_koreksi === 'Koreksi Judul Skripsi / Wisuda') {
+            $rincian = [];
+            if ($request->filled('judul_skripsi_diajukan'))
+                $rincian[] = "• Judul Skripsi (ID): " . trim($request->judul_skripsi_diajukan);
+            if ($request->filled('judul_skripsi_en_diajukan'))
+                $rincian[] = "• Judul Skripsi (EN): " . trim($request->judul_skripsi_en_diajukan);
+            if ($request->filled('periode_wisuda_diajukan'))
+                $rincian[] = "• Periode Wisuda: " . trim($request->periode_wisuda_diajukan);
+
+            if (!empty($rincian)) {
+                $alasanFinal = "[KOREKSI SKRIPSI & WISUDA DIAJUKAN]\n" . implode("\n", $rincian) . ($request->filled('alasan') ? "\n\nCatatan/Alasan:\n" . $request->alasan : '');
+            }
+        }
+
         $koreksi = PengajuanKoreksi::create([
             'mahasiswa_id' => $mahasiswa->id,
             'siakad_nilai_id' => $siakadNilaiId,
@@ -101,7 +163,7 @@ class PengajuanKoreksiController extends Controller
             'jenis_koreksi' => $request->jenis_koreksi,
             'nilai_lama' => $request->nilai_lama,
             'nilai_diajukan' => $request->nilai_diajukan,
-            'alasan' => $request->alasan,
+            'alasan' => $alasanFinal,
             'dokumen_pendukung' => $dokumenPath,
             'status' => 'Menunggu Review',
         ]);
@@ -110,7 +172,7 @@ class PengajuanKoreksiController extends Controller
         Notifikasi::kirim(
             $user->id,
             'Pengajuan Koreksi Terkirim',
-            'Pengajuan koreksi Anda ('.$request->jenis_koreksi.') telah kami terima dan sedang menunggu verifikasi oleh Admin Fakultas.',
+            'Pengajuan koreksi Anda (' . $request->jenis_koreksi . ') telah kami terima dan sedang menunggu verifikasi oleh Admin Fakultas.',
             'info',
             route('mahasiswa.dashboard')
         );
@@ -131,7 +193,7 @@ class PengajuanKoreksiController extends Controller
     public function approve(Request $request, PengajuanKoreksi $koreksi): RedirectResponse
     {
         $user = Auth::user();
-        if ($user->isAdminFakultas() && $koreksi->mahasiswa && ! $user->canAccessMahasiswa($koreksi->mahasiswa)) {
+        if ($user->isAdminFakultas() && $koreksi->mahasiswa && !$user->canAccessMahasiswa($koreksi->mahasiswa)) {
             abort(403, 'Akses ditolak. Pengajuan koreksi ini di luar fakultas Anda.');
         }
 
@@ -161,7 +223,7 @@ class PengajuanKoreksiController extends Controller
                     'bobot_lama' => $oldBobot,
                     'nilai_huruf_baru' => $koreksi->nilai_diajukan,
                     'bobot_baru' => $newBobot,
-                    'alasan' => 'Persetujuan Pengajuan Koreksi Mahasiswa #'.$koreksi->id.': '.$koreksi->alasan,
+                    'alasan' => 'Persetujuan Pengajuan Koreksi Mahasiswa #' . $koreksi->id . ': ' . $koreksi->alasan,
                 ]);
 
                 $nilai->update([
@@ -177,12 +239,75 @@ class PengajuanKoreksiController extends Controller
             }
         }
 
+        // Auto-apply approved changes to Mahasiswa & Wisudawan records if non-grade
+        $mhs = $koreksi->mahasiswa;
+        if ($mhs) {
+            $alasan = $koreksi->alasan ?? '';
+
+            // 1. Perubahan Biodata
+            if (str_contains($alasan, '[KOREKSI BIODATA DIAJUKAN]')) {
+                if (preg_match('/• Nama Baru:\s*(.+)$/m', $alasan, $matches)) {
+                    $mhs->nama = trim($matches[1]);
+                    if ($mhs->wisudawan) {
+                        $mhs->wisudawan->update(['nama' => $mhs->nama]);
+                    }
+                }
+                if (preg_match('/• Tempat Lahir:\s*(.+)$/m', $alasan, $matches)) {
+                    $mhs->tempat_lahir = trim($matches[1]);
+                }
+                if (preg_match('/• Tanggal Lahir:\s*(.+)$/m', $alasan, $matches)) {
+                    $mhs->tanggal_lahir = trim($matches[1]);
+                }
+                if (preg_match('/• Jenis Kelamin:\s*(.+)$/m', $alasan, $matches)) {
+                    $mhs->jenis_kelamin = str_contains($matches[1], 'L') ? 'L' : 'P';
+                }
+                $mhs->save();
+            }
+
+            // 2. Perubahan No Ijazah & SK
+            if (str_contains($alasan, '[KOREKSI NO IJAZAH & SK DIAJUKAN]')) {
+                $w = $mhs->wisudawan;
+                if ($w) {
+                    if (preg_match('/• No\. Ijazah Baru:\s*(.+)$/m', $alasan, $matches)) {
+                        $w->no_ijazah = trim($matches[1]);
+                    }
+                    if (preg_match('/• No\. SK Yudisium Baru:\s*(.+)$/m', $alasan, $matches)) {
+                        $w->no_sk = trim($matches[1]);
+                    }
+                    if (preg_match('/• Tanggal SK:\s*(.+)$/m', $alasan, $matches)) {
+                        $w->tanggal_sk = trim($matches[1]);
+                    }
+                    if (preg_match('/• Tanggal Ijazah:\s*(.+)$/m', $alasan, $matches)) {
+                        $w->tanggal_ijazah = trim($matches[1]);
+                    }
+                    $w->save();
+                }
+            }
+
+            // 3. Perubahan Judul Skripsi & Wisuda
+            if (str_contains($alasan, '[KOREKSI SKRIPSI & WISUDA DIAJUKAN]')) {
+                $w = $mhs->wisudawan;
+                if ($w) {
+                    if (preg_match('/• Judul Skripsi \(ID\):\s*(.+)$/m', $alasan, $matches)) {
+                        $w->judul_skripsi = trim($matches[1]);
+                    }
+                    if (preg_match('/• Periode Wisuda:\s*(.+)$/m', $alasan, $matches)) {
+                        $w->periode_wisuda = trim($matches[1]);
+                    }
+                    $w->save();
+                }
+            }
+
+            // Recalculate/refresh transcript
+            $this->recalculateTranscript($koreksi->mahasiswa_id);
+        }
+
         // Send notification to Mahasiswa
         if ($koreksi->mahasiswa->user_id) {
             Notifikasi::kirim(
                 $koreksi->mahasiswa->user_id,
                 'Pengajuan Koreksi Disetujui',
-                'Pengajuan koreksi Anda ('.$koreksi->jenis_koreksi.') telah disetujui oleh admin fakultas.'.($request->catatan_admin ? ' Catatan: '.$request->catatan_admin : ''),
+                'Pengajuan koreksi Anda (' . $koreksi->jenis_koreksi . ') telah disetujui oleh admin fakultas.' . ($request->catatan_admin ? ' Catatan: ' . $request->catatan_admin : ''),
                 'success',
                 route('mahasiswa.dashboard')
             );
@@ -192,7 +317,7 @@ class PengajuanKoreksiController extends Controller
             'Persetujuan Koreksi Nilai/Data',
             'PengajuanKoreksi',
             (string) $koreksi->id,
-            'Admin '.Auth::user()->name." menyetujui koreksi #{$koreksi->id} untuk NIM {$koreksi->mahasiswa->nim}"
+            'Admin ' . Auth::user()->name . " menyetujui koreksi #{$koreksi->id} untuk NIM {$koreksi->mahasiswa->nim}"
         );
 
         return back()->with('success', 'Pengajuan koreksi berhasil disetujui dan data akademik telah diperbarui.');
@@ -204,7 +329,7 @@ class PengajuanKoreksiController extends Controller
     public function reject(Request $request, PengajuanKoreksi $koreksi): RedirectResponse
     {
         $user = Auth::user();
-        if ($user->isAdminFakultas() && $koreksi->mahasiswa && ! $user->canAccessMahasiswa($koreksi->mahasiswa)) {
+        if ($user->isAdminFakultas() && $koreksi->mahasiswa && !$user->canAccessMahasiswa($koreksi->mahasiswa)) {
             abort(403, 'Akses ditolak. Pengajuan koreksi ini di luar fakultas Anda.');
         }
 
@@ -226,7 +351,7 @@ class PengajuanKoreksiController extends Controller
             Notifikasi::kirim(
                 $koreksi->mahasiswa->user_id,
                 'Pengajuan Koreksi Ditolak',
-                'Pengajuan koreksi Anda ('.$koreksi->jenis_koreksi.') ditolak oleh admin. Alasan: '.$request->catatan_admin,
+                'Pengajuan koreksi Anda (' . $koreksi->jenis_koreksi . ') ditolak oleh admin. Alasan: ' . $request->catatan_admin,
                 'danger',
                 route('mahasiswa.dashboard')
             );
@@ -236,7 +361,7 @@ class PengajuanKoreksiController extends Controller
             'Penolakan Koreksi Nilai/Data',
             'PengajuanKoreksi',
             (string) $koreksi->id,
-            'Admin '.Auth::user()->name." menolak koreksi #{$koreksi->id} untuk NIM {$koreksi->mahasiswa->nim}. Alasan: {$request->catatan_admin}"
+            'Admin ' . Auth::user()->name . " menolak koreksi #{$koreksi->id} untuk NIM {$koreksi->mahasiswa->nim}. Alasan: {$request->catatan_admin}"
         );
 
         return back()->with('success', 'Pengajuan koreksi ditolak.');

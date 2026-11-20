@@ -145,6 +145,11 @@
                                     @endif
                                 </div>
                                 <div class="text-xs font-mono text-gray-500">NIM: {{ $w->nim }}</div>
+                                @if ($w->mahasiswa)
+                                    <div class="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium mt-0.5">
+                                        TTL: {{ $w->mahasiswa->tempat_lahir ?: 'Cirebon' }}, {{ $w->mahasiswa->tanggal_lahir ? $w->mahasiswa->tanggal_lahir->format('d/m/Y') : '-' }}
+                                    </div>
+                                @endif
                                 <div class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
                                     {{ $w->program_studi ?? $w->mahasiswa?->programStudi?->nama_program_studi ?? '-' }}
                                     @if ($w->gelar_full)

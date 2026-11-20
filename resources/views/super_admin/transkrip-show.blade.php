@@ -17,7 +17,13 @@
                     Inspeksi arsip transkrip nilai mahasiswa secara komprehensif.
                 </p>
             </div>
-            <div class="flex items-center space-x-2">
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('admin.transkrip.show', $transkrip->id) }}" class="inline-flex items-center px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm transition duration-150 gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Kelola / Edit Lengkap (SK Yudisium &amp; Pejabat)
+                </a>
                 <a href="{{ route('super-admin.transkrip.pdf', ['transkrip' => $transkrip->id, 'mode' => 'draft']) }}" target="_blank" class="inline-flex items-center px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold rounded-xl shadow-sm transition duration-150 gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -131,22 +137,31 @@
             </div>
         </div>
 
+        @php
+            $fakSa = $transkrip->mahasiswa->fakultas ?: $transkrip->mahasiswa->programStudi?->fakultas;
+            $dekanSa = $transkrip->nama_dekan_override ?: ($fakSa?->nama_dekan ?: 'Dr. H. Saifuddin, M.Ag.');
+            $nipSa = $transkrip->nip_dekan_override ?: ($fakSa?->nip_dekan ?: '197203151998031002');
+        @endphp
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 text-sm">
             <div>
-                <span class="text-xs text-gray-400">Fakultas</span>
-                <p class="font-semibold text-gray-900 dark:text-white mt-0.5">{{ $transkrip->mahasiswa->fakultas?->nama_fakultas ?? '-' }}</p>
+                <span class="text-xs text-gray-400">Fakultas &amp; Prodi</span>
+                <p class="font-semibold text-gray-900 dark:text-white mt-0.5">{{ $transkrip->mahasiswa->programStudi?->nama_program_studi ?? '-' }}</p>
+                <p class="text-xs text-gray-500">{{ $transkrip->mahasiswa->fakultas?->nama_fakultas ?? '-' }}</p>
             </div>
             <div>
-                <span class="text-xs text-gray-400">Program Studi / Jenjang</span>
-                <p class="font-semibold text-gray-900 dark:text-white mt-0.5">{{ $transkrip->mahasiswa->programStudi?->nama_program_studi ?? '-' }} ({{ $transkrip->mahasiswa->jenjang }})</p>
+                <span class="text-xs text-gray-400">SK Yudisium &amp; PIN Ijazah (E-Wisuda)</span>
+                <p class="font-semibold font-mono text-gray-900 dark:text-white mt-0.5 text-xs">SK: {{ $transkrip->wisudawan?->no_sk ?? '-' }}</p>
+                <p class="text-xs font-mono text-indigo-600 dark:text-indigo-400">PIN: {{ $transkrip->wisudawan?->no_ijazah ?? '-' }}</p>
             </div>
             <div>
-                <span class="text-xs text-gray-400">Periode Wisuda</span>
-                <p class="font-semibold text-gray-900 dark:text-white mt-0.5">{{ $transkrip->wisudawan?->periode_wisuda ?? '-' }}</p>
+                <span class="text-xs text-gray-400">Pejabat Dekan Penandatangan</span>
+                <p class="font-semibold text-gray-900 dark:text-white mt-0.5 text-xs">{{ $dekanSa }}</p>
+                <p class="text-xs font-mono text-gray-500">NIP. {{ $nipSa }}</p>
             </div>
             <div>
-                <span class="text-xs text-gray-400">Predikat Kelulusan</span>
-                <p class="font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">{{ $transkrip->wisudawan?->predikat_kelulusan ?? '-' }}</p>
+                <span class="text-xs text-gray-400">Predikat &amp; Periode Wisuda</span>
+                <p class="font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">{{ $transkrip->predikat ?? ($transkrip->wisudawan?->predikat_kelulusan ?? '-') }}</p>
+                <p class="text-xs text-gray-500">{{ $transkrip->wisudawan?->periode_wisuda ?? '-' }}</p>
             </div>
         </div>
 

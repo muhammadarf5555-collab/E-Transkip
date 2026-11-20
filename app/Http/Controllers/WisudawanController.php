@@ -5,18 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\AuditLog;
 use App\Models\Mahasiswa;
 use App\Models\SiakadSyncLog;
+use App\Models\Transkrip;
 use App\Models\Wisudawan;
 use App\Services\SiakadApiService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class WisudawanController extends Controller
 {
     public function index(Request $request, SiakadApiService $siakadApi): View
     {
+        $siakadApi->ensureCleanOfficialDataset();
+
         $user = Auth::user();
         $query = Wisudawan::with(['mahasiswa.programStudi', 'mahasiswa.fakultas', 'transkrip']);
 
@@ -89,9 +93,13 @@ class WisudawanController extends Controller
         if (empty($defaultSyncNims)) {
             $defaultSyncNims = $mhsSampleQuery->take(5)->pluck('nim')->toArray();
         }
-        $defaultSyncNimsString = implode(',', $defaultSyncNims ?: ['2388010001', '2388010002', '2388010017']);
+        if ($user->isSuperAdmin() || (int) $user->fakultas_id === 1) {
+            array_unshift($defaultSyncNims, '2281050039');
+            $defaultSyncNims = array_values(array_unique($defaultSyncNims));
+        }
+        $defaultSyncNimsString = implode(',', $defaultSyncNims ?: ['2281050039', '2388010002', '2388010003']);
 
-        $ewisudaStatus = $siakadApi->testEwisudaConnection($defaultSyncNims[0] ?? '201410001');
+        $ewisudaStatus = $siakadApi->testEwisudaConnection($defaultSyncNims[0] ?? '2281050039');
 
         return view('admin.wisudawan.index', compact('wisudawans', 'periodes', 'ewisudaStatus', 'defaultSyncNimsString'));
     }
@@ -129,6 +137,10 @@ class WisudawanController extends Controller
             $autoNims = $mhsQuery->whereHas('siakadNilais')->take(10)->pluck('nim')->toArray();
             if (empty($autoNims)) {
                 $autoNims = $mhsQuery->take(10)->pluck('nim')->toArray();
+            }
+            if ($user->isSuperAdmin() || (int) $user->fakultas_id === 1) {
+                array_unshift($autoNims, '2281050039');
+                $autoNims = array_values(array_unique($autoNims));
             }
             $nimsInput = implode(',', $autoNims);
         }
@@ -233,12 +245,24 @@ class WisudawanController extends Controller
             $validated['gelar_full'] = $validated['gelar_full'] ?? $mhs->programStudi?->gelar_akademik_full;
         }
         $validated['is_eligible'] = $request->boolean('is_eligible', true);
+        $validated['sumber_data'] = 'INPUT_MANUAL';
 
         $wisudawan = Wisudawan::create($validated);
 
+        if ($mhs) {
+            if ($request->filled('tempat_lahir') || $request->filled('tanggal_lahir')) {
+                $mhs->update(array_filter([
+                    'tempat_lahir' => $request->input('tempat_lahir'),
+                    'tanggal_lahir' => $request->input('tanggal_lahir'),
+                    'status' => 'Lulus',
+                ]));
+            }
+            $this->syncTranskripFromWisudawan($mhs, $wisudawan, $request);
+        }
+
         AuditLog::record('Menambah Data Wisudawan', 'Wisudawan', (string) $wisudawan->id, "Menambahkan wisudawan NIM: {$wisudawan->nim} Periode: {$wisudawan->periode_wisuda}");
 
-        return redirect()->route('admin.wisudawan.index')->with('success', 'Data wisudawan berhasil disimpan.');
+        return redirect()->route('admin.wisudawan.index')->with('success', 'Data wisudawan dan berkas transkrip otomatis berhasil disimpan.');
     }
 
     public function edit(Wisudawan $wisudawan): View
@@ -247,6 +271,8 @@ class WisudawanController extends Controller
         if ($user->isAdminFakultas() && $wisudawan->mahasiswa && ! $user->canAccessMahasiswa($wisudawan->mahasiswa)) {
             abort(403, 'Akses ditolak. Wisudawan tidak berada di fakultas Anda.');
         }
+
+        $wisudawan->load(['mahasiswa.fakultas', 'mahasiswa.programStudi', 'transkrip']);
 
         return view('admin.wisudawan.edit', compact('wisudawan'));
     }
@@ -294,9 +320,79 @@ class WisudawanController extends Controller
 
         $wisudawan->update($validated);
 
+        if ($mhs) {
+            if ($request->filled('tempat_lahir') || $request->filled('tanggal_lahir')) {
+                $mhs->update(array_filter([
+                    'tempat_lahir' => $request->input('tempat_lahir'),
+                    'tanggal_lahir' => $request->input('tanggal_lahir'),
+                ]));
+            }
+            $this->syncTranskripFromWisudawan($mhs, $wisudawan, $request);
+        }
+
         AuditLog::record('Memperbarui Data Wisudawan', 'Wisudawan', (string) $wisudawan->id, "Memperbarui data wisudawan NIM: {$wisudawan->nim}");
 
-        return redirect()->route('admin.wisudawan.index')->with('success', 'Data wisudawan berhasil diperbarui.');
+        return redirect()->route('admin.wisudawan.index')->with('success', 'Data wisudawan dan transkrip terkait berhasil diperbarui.');
+    }
+
+    /**
+     * Sinkronkan otomatis data Wisudawan ke tabel Transkrip agar tidak terpisah-pisah.
+     */
+    protected function syncTranskripFromWisudawan(Mahasiswa $mhs, Wisudawan $wisudawan, Request $request): void
+    {
+        $nilais = $mhs->siakadNilais;
+        $totalSks = 0;
+        $totalMutu = 0.0;
+
+        foreach ($nilais as $n) {
+            $totalSks += $n->sks;
+            $totalMutu += ($n->bobot * $n->sks);
+        }
+
+        if ($totalSks === 0 && $wisudawan->total_sks) {
+            $totalSks = (int) $wisudawan->total_sks;
+            $ipk = (float) ($wisudawan->ipk ?: 0);
+            $totalMutu = round($totalSks * $ipk, 2);
+        } else {
+            $ipk = $totalSks > 0 ? round($totalMutu / $totalSks, 2) : (float) ($wisudawan->ipk ?: 0);
+        }
+
+        $predikat = $wisudawan->predikat_kelulusan;
+        if (! $predikat) {
+            if ($ipk >= 3.51) {
+                $predikat = 'Dengan Pujian (Cum Laude)';
+            } elseif ($ipk >= 3.01) {
+                $predikat = 'Sangat Memuaskan';
+            } elseif ($ipk >= 2.76) {
+                $predikat = 'Memuaskan';
+            } else {
+                $predikat = 'Cukup';
+            }
+        }
+
+        $transkrip = Transkrip::firstOrNew(['mahasiswa_id' => $mhs->id]);
+        $transkrip->wisudawan_id = $wisudawan->id;
+        $transkrip->total_sks = $totalSks;
+        $transkrip->total_mutu = $totalMutu;
+        $transkrip->ipk = $ipk;
+        $transkrip->predikat = $predikat;
+
+        if ($request->has('nomor_transkrip')) {
+            $transkrip->nomor_transkrip = $request->input('nomor_transkrip') ?: null;
+        }
+        if ($request->has('no_sk_banpt_override')) {
+            $transkrip->no_sk_banpt_override = $request->input('no_sk_banpt_override') ?: null;
+        }
+
+        if (empty($transkrip->kode_verifikasi)) {
+            $transkrip->kode_verifikasi = 'UINSSC-TRX-'.$mhs->nim.'-'.strtoupper(Str::random(6));
+        }
+
+        if (! $transkrip->exists) {
+            $transkrip->status_validasi = $wisudawan->status_validasi ?: 'Menunggu Validasi';
+        }
+
+        $transkrip->save();
     }
 
     public function destroy(Wisudawan $wisudawan): RedirectResponse

@@ -5,14 +5,14 @@
     <title>{{ ($isDraftMode ?? false) ? 'Draft Transkrip Akademik' : 'Transkrip Akademik' }} - {{ $transkrip->mahasiswa->nim }}</title>
     <style>
         @page {
-            margin: 0.65cm 0.9cm 0.65cm 0.9cm;
-            size: A4 portrait;
+            margin: 10mm 14mm 10mm 14mm;
+            size: a4 portrait;
         }
         body {
             font-family: Arial, Helvetica, sans-serif;
             color: #000;
-            font-size: 7.5pt;
-            line-height: 1.18;
+            font-size: 8.5pt;
+            line-height: 1.22;
             margin: 0;
             padding: 0;
             position: relative;
@@ -21,7 +21,7 @@
         /* Header Tengah Pustikom UINSSC */
         .header-center {
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 7px;
         }
         .header-center img.logo-top {
             width: 44px;
@@ -36,21 +36,22 @@
             margin-bottom: 3px;
         }
         .header-center .univ-title {
-            font-size: 11.5pt;
+            font-size: 12pt;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
             margin: 0;
+            line-height: 1.2;
         }
         .header-center .doc-title {
-            font-size: 10.5pt;
+            font-size: 11pt;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin: 2px 0 2px 0;
+            letter-spacing: 0.2px;
+            margin: 2px 0;
         }
         .header-center .doc-number {
-            font-size: 8pt;
+            font-size: 8.5pt;
             margin: 0;
         }
 
@@ -59,10 +60,10 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 6px;
-            font-size: 7.5pt;
+            font-size: 8.5pt;
         }
         .bio-table td {
-            padding: 1.2px 0;
+            padding: 1.4px 0;
             vertical-align: top;
         }
 
@@ -70,30 +71,31 @@
         .grades-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 6.8pt;
-            margin-bottom: 6px;
+            font-size: 7.8pt;
+            margin-bottom: 5px;
         }
         .grades-table th {
             border: 1px solid #000;
-            padding: 2.5px 2px;
+            padding: 3px 2px;
             text-align: center;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 7pt;
+            font-size: 8pt;
             background-color: #fff;
         }
         .grades-table td {
             border: 1px solid #000;
-            padding: 1.6px 3px;
+            padding: 2.1px 3px;
             vertical-align: middle;
+            line-height: 1.15;
         }
         .grades-table td.divider-right,
         .grades-table th.divider-right {
-            border-right: 1.5px solid #000;
+            border-right: 1px solid #000;
         }
         .grades-table td.divider-left,
         .grades-table th.divider-left {
-            border-left: 1.5px solid #000;
+            border-left: 1px solid #000;
         }
 
         .text-center { text-align: center; }
@@ -104,12 +106,12 @@
         .summary-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 7.5pt;
+            font-size: 8.5pt;
             margin-top: 4px;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
         .summary-table td {
-            padding: 1.5px 0;
+            padding: 1.4px 0;
             vertical-align: top;
         }
 
@@ -117,8 +119,8 @@
         .footer-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 7.5pt;
-            margin-top: 2px;
+            font-size: 8.5pt;
+            margin-top: 3px;
             page-break-inside: avoid;
         }
         .keterangan-title {
@@ -126,35 +128,14 @@
             margin-bottom: 2px;
         }
 
-        /* Badge / Seal & QR Bawah Kiri */
-        .seal-qr-wrap {
-            margin-top: 8px;
+        /* Segel Hologram Bawah Kiri Standar Pustikom */
+        .seal-wrap {
+            margin-top: 6px;
         }
-        .seal-qr-table {
-            border-collapse: collapse;
-        }
-        .seal-qr-table td {
-            vertical-align: middle;
-            padding-right: 8px;
-        }
-        .seal-circle {
-            width: 58px;
-            height: 58px;
-            border: 2px double #111;
-            border-radius: 50%;
-            text-align: center;
-            background-color: #111;
-            color: #fff;
-            font-size: 5.5pt;
-            box-sizing: border-box;
-            padding-top: 6px;
-        }
-        .seal-circle img {
-            width: 28px;
-            height: auto;
-            background: #fff;
-            border-radius: 4px;
-            padding: 2px;
+        .seal-wrap img.seal-img {
+            width: 68px;
+            height: 68px;
+            display: block;
         }
 
         /* Kotak PROOF untuk Mode Draft */
@@ -176,6 +157,9 @@
     @php
         $logoPath = public_path('images/logo-uinssc.png');
         $logoBase64 = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : null;
+
+        $sealPath = public_path('images/seal-uinssc.png');
+        $sealBase64 = file_exists($sealPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($sealPath)) : null;
 
         $mhs = $transkrip->mahasiswa;
         $wisudawan = $transkrip->wisudawan;
@@ -488,22 +472,10 @@
                     <div>- AK (Angka Kredit)</div>
                 @endif
 
-                <div class="seal-qr-wrap">
-                    <table class="seal-qr-table">
-                        <tr>
-                            <td>
-                                <div class="seal-circle">
-                                    @if ($logoBase64)
-                                        <img src="{{ $logoBase64 }}" alt="UINSSC">
-                                    @endif
-                                    <div style="font-weight: bold; margin-top: 2px; font-size: 6pt; letter-spacing: 0.5px;">UINSSC</div>
-                                </div>
-                            </td>
-                            <td>
-                                <img src="data:image/svg+xml;base64,{{ $qrCodeSvg }}" style="width: 54px; height: 54px;" alt="QR Verifikasi" />
-                            </td>
-                        </tr>
-                    </table>
+                <div class="seal-wrap">
+                    @if ($sealBase64)
+                        <img src="{{ $sealBase64 }}" class="seal-img" alt="Segel Resmi UINSSC">
+                    @endif
                 </div>
             </td>
             <td style="width: 38%; vertical-align: top; padding-left: 30px;">

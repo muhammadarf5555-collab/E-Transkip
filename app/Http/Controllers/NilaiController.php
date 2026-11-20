@@ -113,20 +113,41 @@ class NilaiController extends Controller
 
         $request->validate([
             'mahasiswa_id' => ['required', 'exists:mahasiswas,id'],
-            'mata_kuliah_id' => ['required', 'exists:siakad_mata_kuliahs,id'],
+            'mata_kuliah_id' => ['nullable', 'exists:siakad_mata_kuliahs,id'],
+            'kode_mk_baru' => ['nullable', 'string', 'max:50'],
+            'nama_mk_baru' => ['nullable', 'string', 'max:255'],
+            'sks_baru' => ['nullable', 'integer', 'min:1', 'max:10'],
             'semester' => ['required', 'string', 'max:10'],
             'nilai_huruf' => ['required', 'string', 'in:A,A-,B+,B,B-,C+,C,D,E'],
         ]);
 
-        $mk = SiakadMataKuliah::findOrFail($request->mata_kuliah_id);
+        if ($request->filled('nama_mk_baru')) {
+            $kodeBaru = $request->filled('kode_mk_baru')
+                ? trim((string) $request->kode_mk_baru)
+                : ('MK-'.strtoupper(substr(md5($request->nama_mk_baru), 0, 5)));
+            $mk = SiakadMataKuliah::firstOrCreate(
+                ['kode_mata_kuliah' => $kodeBaru],
+                [
+                    'nama_mata_kuliah' => trim((string) $request->nama_mk_baru),
+                    'sks' => (int) ($request->sks_baru ?: 3),
+                    'semester' => $request->semester,
+                    'jenis_mata_kuliah' => 'Wajib',
+                ]
+            );
+        } elseif ($request->filled('mata_kuliah_id')) {
+            $mk = SiakadMataKuliah::findOrFail($request->mata_kuliah_id);
+        } else {
+            return back()->withErrors(['mata_kuliah_id' => 'Pilih mata kuliah atau isi nama mata kuliah baru.']);
+        }
+
         $bobot = AturanBobotNilai::getBobot($request->nilai_huruf);
 
         // Check if grade already exists for this student and course
         $existing = SiakadNilai::where('mahasiswa_id', $request->mahasiswa_id)
-            ->where('mata_kuliah_id', $request->mata_kuliah_id)
+            ->where('mata_kuliah_id', $mk->id)
             ->first();
 
-        if ($existing) {
+        if ($existing && ! $request->boolean('force_overwrite')) {
             // If existing is from SIAKAD and differs from manual entry, flag conflict
             if ($existing->sumber_data === 'SIAKAD' && $existing->nilai_huruf !== $request->nilai_huruf) {
                 $existing->update([
@@ -141,6 +162,10 @@ class NilaiController extends Controller
                     "Konflik nilai pada NIM {$existing->mahasiswa->nim} MK {$mk->nama_mata_kuliah}: SIAKAD ({$existing->nilai_huruf}) vs Manual ({$request->nilai_huruf})"
                 );
 
+                if ($request->boolean('from_transkrip')) {
+                    return back()->with('success', 'Perhatian: Nilai SIAKAD berbeda dengan input manual. Ditandai sebagai konflik.');
+                }
+
                 return redirect()->route('admin.nilai.index')->with('warning', 'Terdeteksi konflik data antara SIAKAD dan Manual. Nilai lama tidak ditimpa secara otomatis.');
             }
         }
@@ -148,7 +173,7 @@ class NilaiController extends Controller
         $nilai = SiakadNilai::updateOrCreate(
             [
                 'mahasiswa_id' => $request->mahasiswa_id,
-                'mata_kuliah_id' => $request->mata_kuliah_id,
+                'mata_kuliah_id' => $mk->id,
             ],
             [
                 'semester' => $request->semester,
@@ -171,6 +196,10 @@ class NilaiController extends Controller
             (string) $nilai->id,
             "Input nilai manual untuk NIM {$nilai->mahasiswa->nim}: MK {$mk->nama_mata_kuliah} = {$request->nilai_huruf}"
         );
+
+        if ($request->boolean('from_transkrip')) {
+            return back()->with('success', "Mata kuliah {$mk->nama_mata_kuliah} (Nilai {$request->nilai_huruf}) berhasil ditambahkan dan IPK transkrip telah dikalkulasi ulang.");
+        }
 
         return redirect()->route('admin.nilai.index')->with('success', 'Nilai manual berhasil disimpan.');
     }
@@ -337,13 +366,31 @@ class NilaiController extends Controller
 
         $ipk = $totalSks > 0 ? round($totalMutu / $totalSks, 2) : 0.00;
 
+        $predikat = 'Cukup';
+        if ($ipk >= 3.51) {
+            $predikat = 'Dengan Pujian (Cum Laude)';
+        } elseif ($ipk >= 3.01) {
+            $predikat = 'Sangat Memuaskan';
+        } elseif ($ipk >= 2.76) {
+            $predikat = 'Memuaskan';
+        }
+
         $trx = Transkrip::where('mahasiswa_id', $mahasiswaId)->first();
         if ($trx) {
             $trx->update([
                 'total_sks' => $totalSks,
                 'total_mutu' => $totalMutu,
                 'ipk' => $ipk,
+                'predikat' => $predikat,
             ]);
+
+            if ($trx->wisudawan) {
+                $trx->wisudawan->update([
+                    'ipk' => $ipk,
+                    'total_sks' => $totalSks,
+                    'predikat_kelulusan' => $predikat,
+                ]);
+            }
         }
     }
 }

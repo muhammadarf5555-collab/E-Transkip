@@ -16,6 +16,11 @@ class Fakultas extends Model
         'kode_fakultas',
         'nama_fakultas',
         'nama_fakultas_singkat',
+        'kode_romawi',
+        'nama_dekan',
+        'nip_dekan',
+        'jabatan_dekan',
+        'no_sk_banpt',
     ];
 
     public function programStudis(): HasMany

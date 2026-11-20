@@ -148,7 +148,12 @@
                             <td class="px-4 py-3.5">
                                 <span class="font-semibold text-gray-900 dark:text-white block">{{ $prodi->nama_program_studi }}</span>
                                 @if ($prodi->gelar_akademik_full)
-                                    <span class="text-xs text-gray-400 dark:text-gray-500">{{ $prodi->gelar_akademik_full }}</span>
+                                    <span class="text-xs text-gray-400 dark:text-gray-500 block">{{ $prodi->gelar_akademik_full }}</span>
+                                @endif
+                                @if ($prodi->no_sk_akreditasi)
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300">
+                                        SK: {{ $prodi->no_sk_akreditasi }} {{ $prodi->peringkat_akreditasi ? "({$prodi->peringkat_akreditasi})" : '' }}
+                                    </span>
                                 @endif
                             </td>
                             <td class="px-4 py-3.5 text-center">
@@ -250,6 +255,16 @@
                                             <div>
                                                 <x-input-label for="edit_gelar_full_{{ $prodi->id }}" value="Gelar Akademik Lengkap" />
                                                 <x-text-input id="edit_gelar_full_{{ $prodi->id }}" name="gelar_akademik_full" type="text" class="mt-1 block w-full" value="{{ $prodi->gelar_akademik_full }}" placeholder="Contoh: Sarjana Hukum" />
+                                            </div>
+                                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-gray-100 dark:border-gray-700">
+                                                <div class="sm:col-span-2">
+                                                    <x-input-label for="edit_sk_akreditasi_{{ $prodi->id }}" value="Nomor SK BAN-PT / LAM Akreditasi" />
+                                                    <x-text-input id="edit_sk_akreditasi_{{ $prodi->id }}" name="no_sk_akreditasi" type="text" class="mt-1 block w-full font-mono text-sm" value="{{ $prodi->no_sk_akreditasi }}" placeholder="Contoh: 0412/SK/LAM-INFOKOM/Ak/S/VIII/2024" />
+                                                </div>
+                                                <div>
+                                                    <x-input-label for="edit_peringkat_{{ $prodi->id }}" value="Peringkat Akreditasi" />
+                                                    <x-text-input id="edit_peringkat_{{ $prodi->id }}" name="peringkat_akreditasi" type="text" class="mt-1 block w-full text-sm" value="{{ $prodi->peringkat_akreditasi }}" placeholder="Unggul / Baik Sekali" />
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="mt-6 flex justify-end gap-3">

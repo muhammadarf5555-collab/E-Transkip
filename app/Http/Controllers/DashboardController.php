@@ -37,8 +37,10 @@ class DashboardController extends Controller
     /**
      * Admin Fakultas Dashboard view (Scoped strictly to assigned faculty).
      */
-    public function admin(): View
+    public function admin(SiakadApiService $siakadApi): View
     {
+        $siakadApi->ensureCleanOfficialDataset();
+
         $user = Auth::user();
         $fakultasId = $user->fakultas_id;
 

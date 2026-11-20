@@ -22,6 +22,8 @@ class ProgramStudi extends Model
         'sks_tempuh',
         'gelar_akademik',
         'gelar_akademik_full',
+        'no_sk_akreditasi',
+        'peringkat_akreditasi',
     ];
 
     public function fakultas(): BelongsTo

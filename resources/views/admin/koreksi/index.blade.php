@@ -151,8 +151,8 @@
                                     <span class="text-slate-400">-</span>
                                 @endif
                             </td>
-                            <td class="px-5 py-3.5 max-w-xs">
-                                <p class="line-clamp-2 text-slate-700">{{ $k->alasan }}</p>
+                            <td class="px-5 py-3.5 max-w-sm">
+                                <div class="text-xs text-slate-700 whitespace-pre-line leading-relaxed font-sans">{{ $k->alasan }}</div>
                                 @if ($k->dokumen_pendukung)
                                     <a href="{{ asset('storage/' . $k->dokumen_pendukung) }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] font-bold text-[#2563EB] hover:underline mt-1">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -86,12 +86,11 @@
             <table class="w-full text-left text-sm text-gray-600 dark:text-gray-300">
                 <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400">
                     <tr>
-                        <th class="px-4 py-3 rounded-l-lg w-16">No</th>
-                        <th class="px-4 py-3 text-center w-24">Kode API</th>
-                        <th class="px-4 py-3 text-center w-28">Singkatan</th>
-                        <th class="px-4 py-3">Nama Fakultas</th>
-                        <th class="px-4 py-3 text-center">Jumlah Prodi</th>
-                        <th class="px-4 py-3 text-center">Jumlah Mahasiswa</th>
+                        <th class="px-4 py-3 rounded-l-lg w-12">No</th>
+                        <th class="px-4 py-3 text-center w-28">Kode &amp; Romawi</th>
+                        <th class="px-4 py-3">Fakultas &amp; SK BAN-PT</th>
+                        <th class="px-4 py-3">Pejabat Dekan Aktif (Dinamis)</th>
+                        <th class="px-4 py-3 text-center">Prodi &amp; Mhs</th>
                         <th class="px-4 py-3 rounded-r-lg text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -99,67 +98,127 @@
                     @forelse ($fakultas as $index => $item)
                         <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30">
                             <td class="px-4 py-3.5 text-xs text-gray-400 font-mono">{{ $fakultas->firstItem() + $index }}</td>
-                            <td class="px-4 py-3.5 text-center">
+                            <td class="px-4 py-3.5 text-center space-y-1">
+                                <div class="flex items-center justify-center gap-1.5">
+                                    @if ($item->nama_fakultas_singkat)
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300">
+                                            {{ $item->nama_fakultas_singkat }}
+                                        </span>
+                                    @endif
+                                    @if ($item->kode_romawi)
+                                        <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800" title="Kode Romawi Nomor Surat Transkrip">
+                                            {{ $item->kode_romawi }}
+                                        </span>
+                                    @endif
+                                </div>
                                 @if ($item->kode_fakultas)
-                                    <span class="px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
-                                        {{ $item->kode_fakultas }}
-                                    </span>
-                                @else
-                                    <span class="text-gray-400 text-xs">-</span>
+                                    <div class="text-[11px] font-mono text-gray-400">ID API: {{ $item->kode_fakultas }}</div>
                                 @endif
                             </td>
-                            <td class="px-4 py-3.5 text-center">
-                                @if ($item->nama_fakultas_singkat)
-                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300">
-                                        {{ $item->nama_fakultas_singkat }}
-                                    </span>
+                            <td class="px-4 py-3.5">
+                                <div class="font-semibold text-gray-900 dark:text-white">{{ $item->nama_fakultas }}</div>
+                                @if ($item->no_sk_banpt)
+                                    <div class="text-xs font-mono text-gray-500 mt-0.5">SK: {{ $item->no_sk_banpt }}</div>
                                 @else
-                                    <span class="text-gray-400 text-xs">-</span>
+                                    <div class="text-xs text-amber-600 mt-0.5">SK BAN-PT belum diatur</div>
                                 @endif
                             </td>
-                            <td class="px-4 py-3.5 font-semibold text-gray-900 dark:text-white">
-                                {{ $item->nama_fakultas }}
+                            <td class="px-4 py-3.5">
+                                @if ($item->nama_dekan)
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300">
+                                            {{ $item->jabatan_dekan ?: 'Dekan' }}
+                                        </span>
+                                        <span class="font-bold text-gray-900 dark:text-white text-xs">{{ $item->nama_dekan }}</span>
+                                    </div>
+                                    <div class="text-xs font-mono text-gray-500 mt-0.5">NIP. {{ $item->nip_dekan ?: '-' }}</div>
+                                @else
+                                    <span class="text-xs text-rose-500 font-medium">Pejabat Dekan belum diisi</span>
+                                @endif
                             </td>
-                            <td class="px-4 py-3.5 text-center">
-                                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300">
-                                    {{ $item->program_studis_count }} Prodi
-                                </span>
+                            <td class="px-4 py-3.5 text-center space-y-1">
+                                <div>
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300">
+                                        {{ $item->program_studis_count }} Prodi
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
+                                        {{ $item->mahasiswas_count }} Mhs
+                                    </span>
+                                </div>
                             </td>
-                            <td class="px-4 py-3.5 text-center">
-                                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
-                                    {{ $item->mahasiswas_count }} Mahasiswa
-                                </span>
-                            </td>
-                            <td class="px-4 py-3.5 text-right space-x-2">
-                                <button @click="$dispatch('open-modal', 'edit-fakultas-{{ $item->id }}')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 transition">
-                                    Edit
+                            <td class="px-4 py-3.5 text-right space-x-2 whitespace-nowrap">
+                                <button @click="$dispatch('open-modal', 'edit-fakultas-{{ $item->id }}')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 transition">
+                                    Atur Pejabat &amp; Fakultas
                                 </button>
-                                <form action="{{ route('admin.fakultas.destroy', $item) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus fakultas ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 dark:bg-rose-950/50 dark:hover:bg-rose-900/50 dark:text-rose-400 transition">
-                                        Hapus
-                                    </button>
-                                </form>
+                                @if (!auth()->user()->isAdminFakultas())
+                                    <form action="{{ route('admin.fakultas.destroy', $item) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus fakultas ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 dark:bg-rose-950/50 dark:hover:bg-rose-900/50 dark:text-rose-400 transition">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                @endif
 
                                 <!-- Edit Modal -->
                                 <x-modal name="edit-fakultas-{{ $item->id }}" focusable>
                                     <form method="POST" action="{{ route('admin.fakultas.update', $item) }}" class="p-6 text-left">
                                         @csrf
                                         @method('PUT')
-                                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Edit Fakultas</h3>
+                                        <div class="border-b border-gray-100 dark:border-gray-700 pb-3 mb-4">
+                                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Pengaturan Fakultas &amp; Pejabat Penandatangan</h3>
+                                            <p class="text-xs text-gray-500 mt-0.5">Data Dekan, NIP, Kode Romawi, dan SK BAN-PT ini otomatis digunakan secara dinamis saat mencetak Transkrip Akademik.</p>
+                                        </div>
                                         <div class="space-y-4">
-                                            <div>
-                                                <x-input-label for="edit_kode_fakultas_{{ $item->id }}" value="Kode Fakultas (Bridge API)" />
-                                                <x-text-input id="edit_kode_fakultas_{{ $item->id }}" name="kode_fakultas" type="number" class="mt-1 block w-full" value="{{ $item->kode_fakultas }}" placeholder="Contoh: 2" />
+                                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                                <div>
+                                                    <x-input-label for="edit_kode_fakultas_{{ $item->id }}" value="Kode API" />
+                                                    <x-text-input id="edit_kode_fakultas_{{ $item->id }}" name="kode_fakultas" type="number" class="mt-1 block w-full text-sm" value="{{ $item->kode_fakultas }}" placeholder="Contoh: 1" />
+                                                </div>
+                                                <div>
+                                                    <x-input-label for="edit_singkat_{{ $item->id }}" value="Singkatan" />
+                                                    <x-text-input id="edit_singkat_{{ $item->id }}" name="nama_fakultas_singkat" type="text" class="mt-1 block w-full text-sm" value="{{ $item->nama_fakultas_singkat }}" placeholder="FITK, FEBI" />
+                                                </div>
+                                                <div>
+                                                    <x-input-label for="edit_romawi_{{ $item->id }}" value="Kode Romawi Surat" />
+                                                    <x-text-input id="edit_romawi_{{ $item->id }}" name="kode_romawi" type="text" class="mt-1 block w-full text-sm font-mono" value="{{ $item->kode_romawi }}" placeholder="F.I, F.II, F.III" />
+                                                </div>
                                             </div>
                                             <div>
                                                 <x-input-label for="edit_nama_fakultas_{{ $item->id }}" value="Nama Lengkap Fakultas" />
-                                                <x-text-input id="edit_nama_fakultas_{{ $item->id }}" name="nama_fakultas" type="text" class="mt-1 block w-full" value="{{ $item->nama_fakultas }}" required />
+                                                <x-text-input id="edit_nama_fakultas_{{ $item->id }}" name="nama_fakultas" type="text" class="mt-1 block w-full text-sm" value="{{ $item->nama_fakultas }}" required />
                                             </div>
+
+                                            <div class="p-4 rounded-xl bg-emerald-50/60 dark:bg-gray-900/60 border border-emerald-200 dark:border-gray-700 space-y-3">
+                                                <div class="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">
+                                                    Pejabat Penandatangan Transkrip (Dinamis)
+                                                </div>
+                                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                                    <div>
+                                                        <x-input-label for="edit_jabatan_dekan_{{ $item->id }}" value="Jabatan Pejabat" />
+                                                        <select id="edit_jabatan_dekan_{{ $item->id }}" name="jabatan_dekan" class="mt-1 block w-full text-sm rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                                                            <option value="Dekan" {{ ($item->jabatan_dekan ?: 'Dekan') === 'Dekan' ? 'selected' : '' }}>Dekan (Definitif)</option>
+                                                            <option value="Plt. Dekan" {{ $item->jabatan_dekan === 'Plt. Dekan' ? 'selected' : '' }}>Plt. Dekan</option>
+                                                            <option value="Pj. Dekan" {{ $item->jabatan_dekan === 'Pj. Dekan' ? 'selected' : '' }}>Pj. Dekan</option>
+                                                            <option value="Direktur" {{ $item->jabatan_dekan === 'Direktur' ? 'selected' : '' }}>Direktur (Pascasarjana)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="sm:col-span-2">
+                                                        <x-input-label for="edit_nama_dekan_{{ $item->id }}" value="Nama Lengkap &amp; Gelar Pejabat" />
+                                                        <x-text-input id="edit_nama_dekan_{{ $item->id }}" name="nama_dekan" type="text" class="mt-1 block w-full text-sm font-semibold" value="{{ $item->nama_dekan }}" placeholder="Contoh: Dr. H. Saifuddin, M.Ag." />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <x-input-label for="edit_nip_dekan_{{ $item->id }}" value="NIP Pejabat Penandatangan" />
+                                                    <x-text-input id="edit_nip_dekan_{{ $item->id }}" name="nip_dekan" type="text" class="mt-1 block w-full text-sm font-mono" value="{{ $item->nip_dekan }}" placeholder="Contoh: 197203151998031002" />
+                                                </div>
+                                            </div>
+
                                             <div>
-                                                <x-input-label for="edit_singkat_{{ $item->id }}" value="Singkatan Fakultas" />
-                                                <x-text-input id="edit_singkat_{{ $item->id }}" name="nama_fakultas_singkat" type="text" class="mt-1 block w-full" value="{{ $item->nama_fakultas_singkat }}" placeholder="Contoh: FS, FITK" />
+                                                <x-input-label for="edit_sk_banpt_{{ $item->id }}" value="Nomor SK BAN-PT / Akreditasi Default Fakultas" />
+                                                <x-text-input id="edit_sk_banpt_{{ $item->id }}" name="no_sk_banpt" type="text" class="mt-1 block w-full text-sm font-mono" value="{{ $item->no_sk_banpt }}" placeholder="Contoh: 3184/SK/BAN-PT/Ak.Ppj/S/VIII/2024" />
                                             </div>
                                         </div>
                                         <div class="mt-6 flex justify-end gap-3">
@@ -172,7 +231,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-4 py-8 text-center text-gray-400 text-xs">Belum ada data fakultas. Klik "Tarik dari Bridge API" untuk mengambil data resmi.</td>
+                            <td colspan="6" class="px-4 py-8 text-center text-gray-400 text-xs">Belum ada data fakultas. Klik "Tarik dari Bridge API" untuk mengambil data resmi.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -187,19 +246,39 @@
     <x-modal name="add-fakultas" focusable>
         <form method="POST" action="{{ route('admin.fakultas.store') }}" class="p-6 text-left">
             @csrf
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Tambah Fakultas Baru</h3>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Tambah Fakultas &amp; Pejabat Penandatangan</h3>
             <div class="space-y-4">
-                <div>
-                    <x-input-label for="new_kode_fakultas" value="Kode Fakultas (Bridge API / ID)" />
-                    <x-text-input id="new_kode_fakultas" name="kode_fakultas" type="number" class="mt-1 block w-full" placeholder="Contoh: 1, 2, dst." />
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <x-input-label for="new_kode_fakultas" value="Kode API" />
+                        <x-text-input id="new_kode_fakultas" name="kode_fakultas" type="number" class="mt-1 block w-full text-sm" placeholder="Contoh: 1" />
+                    </div>
+                    <div>
+                        <x-input-label for="new_nama_fakultas_singkat" value="Singkatan" />
+                        <x-text-input id="new_nama_fakultas_singkat" name="nama_fakultas_singkat" type="text" class="mt-1 block w-full text-sm" placeholder="FITK, FST" />
+                    </div>
+                    <div>
+                        <x-input-label for="new_kode_romawi" value="Kode Romawi Surat" />
+                        <x-text-input id="new_kode_romawi" name="kode_romawi" type="text" class="mt-1 block w-full text-sm font-mono" placeholder="F.I, F.II" />
+                    </div>
                 </div>
                 <div>
                     <x-input-label for="new_nama_fakultas" value="Nama Lengkap Fakultas" />
-                    <x-text-input id="new_nama_fakultas" name="nama_fakultas" type="text" class="mt-1 block w-full" placeholder="Contoh: Fakultas Tarbiyah dan Keguruan" required />
+                    <x-text-input id="new_nama_fakultas" name="nama_fakultas" type="text" class="mt-1 block w-full text-sm" placeholder="Contoh: Fakultas Ilmu Tarbiyah dan Keguruan" required />
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <x-input-label for="new_nama_dekan" value="Nama Dekan &amp; Gelar" />
+                        <x-text-input id="new_nama_dekan" name="nama_dekan" type="text" class="mt-1 block w-full text-sm" placeholder="Contoh: Dr. H. Saifuddin, M.Ag." />
+                    </div>
+                    <div>
+                        <x-input-label for="new_nip_dekan" value="NIP Dekan" />
+                        <x-text-input id="new_nip_dekan" name="nip_dekan" type="text" class="mt-1 block w-full text-sm font-mono" placeholder="Contoh: 197203151998031002" />
+                    </div>
                 </div>
                 <div>
-                    <x-input-label for="new_nama_fakultas_singkat" value="Singkatan Fakultas" />
-                    <x-text-input id="new_nama_fakultas_singkat" name="nama_fakultas_singkat" type="text" class="mt-1 block w-full" placeholder="Contoh: FITK, FST" />
+                    <x-input-label for="new_no_sk_banpt" value="Nomor SK BAN-PT Default" />
+                    <x-text-input id="new_no_sk_banpt" name="no_sk_banpt" type="text" class="mt-1 block w-full text-sm font-mono" placeholder="Contoh: 3184/SK/BAN-PT/Ak.Ppj/S/VIII/2024" />
                 </div>
             </div>
             <div class="mt-6 flex justify-end gap-3">

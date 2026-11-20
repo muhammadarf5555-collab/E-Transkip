@@ -1,3 +1,4 @@
+@props(['card' => true, 'maxWidth' => 'max-w-md'])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
     <head>
@@ -16,16 +17,28 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased text-slate-800 bg-[#F5F7FB] min-h-screen flex items-center justify-center p-4">
-        <div class="w-full max-w-md my-8">
-            <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-8 sm:p-10">
-                {{ $slot }}
-            </div>
+    <body class="font-sans antialiased text-slate-800 min-h-screen flex flex-col justify-between p-3 sm:p-5 select-none relative overflow-x-hidden" 
+          style="background: radial-gradient(circle at 10% 20%, #064e3b 0%, #022c22 45%, #011812 100%); min-height: 100vh;">
+        
+        <!-- Dekorasi Cahaya Halus Nuansa Hijau Zamrud & Emas Kampus -->
+        <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full blur-3xl pointer-events-none" style="background: rgba(16, 185, 129, 0.20); filter: blur(54px);"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full blur-3xl pointer-events-none" style="background: rgba(245, 158, 11, 0.18); filter: blur(54px);"></div>
 
-            <!-- Footer minimalis -->
-            <p class="text-center text-xs text-slate-400 mt-6 font-medium">
-                &copy; {{ date('Y') }} UIN Siber Syekh Nurjati Cirebon &bull; E-Transkrip
-            </p>
+        <div class="relative z-10 flex-1 flex items-center justify-center w-full my-auto">
+            @if ($card)
+                <div class="w-full {{ $maxWidth }} my-8">
+                    <div class="bg-white rounded-3xl shadow-2xl shadow-black/40 border border-white/20 p-8 sm:p-10">
+                        {{ $slot }}
+                    </div>
+                </div>
+            @else
+                {{ $slot }}
+            @endif
+        </div>
+
+        <!-- Footer Ringkas UINSSC -->
+        <div class="relative z-10 text-center text-xs shrink-0 py-2 font-medium" style="color: rgba(167, 243, 208, 0.75);">
+            &copy; {{ date('Y') }} PUSTIKOM &bull; UIN Siber Syekh Nurjati Cirebon &bull; E-Transkrip
         </div>
     </body>
 </html>
