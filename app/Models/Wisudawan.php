@@ -11,6 +11,31 @@ class Wisudawan extends Model
 {
     use HasFactory;
 
+    protected static function booted(): void
+    {
+        static::saved(function (Wisudawan $wisudawan) {
+            if ($wisudawan->wasChanged(['nama', 'nim'])) {
+                $mhs = $wisudawan->mahasiswa ?: Mahasiswa::where('nim', $wisudawan->nim)->first();
+                if ($mhs) {
+                    $mhs->updateQuietly([
+                        'nama' => $wisudawan->nama,
+                        'nim' => $wisudawan->nim,
+                    ]);
+                    if ($mhs->user) {
+                        $mhs->user->updateQuietly(['name' => $wisudawan->nama]);
+                    }
+                }
+            }
+
+            if ($wisudawan->mahasiswa_id) {
+                $transkrip = Transkrip::where('mahasiswa_id', $wisudawan->mahasiswa_id)->first();
+                if ($transkrip && $transkrip->wisudawan_id !== $wisudawan->id) {
+                    $transkrip->updateQuietly(['wisudawan_id' => $wisudawan->id]);
+                }
+            }
+        });
+    }
+
     protected $table = 'wisudawans';
 
     protected $fillable = [
