@@ -116,20 +116,8 @@
                 </div>
             </div>
 
-            <!-- Settings & Dark Mode Toggle -->
+            <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6 gap-3">
-                <!-- Theme Toggle Button (Siang/Malam) -->
-                <button type="button" @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'dark' : 'light')" class="p-2.5 rounded-xl border border-white/20 dark:border-white/10 bg-white/10 dark:bg-white/5 text-amber-300 hover:bg-white/20 dark:hover:bg-white/10 transition cursor-pointer" title="Ganti Mode Siang/Malam">
-                    <!-- Icon Sun (Siang) -->
-                    <svg x-show="darkMode" class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    <!-- Icon Moon (Malam) -->
-                    <svg x-show="!darkMode" class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                </button>
-
                 <!-- Role Badge -->
                 @if (Auth::user()->isSuperAdmin())
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-white border border-white/30">
@@ -164,14 +152,11 @@
                         </x-dropdown-link>
 
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('logout') }}" class="w-full">
                             @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();" class="text-rose-600 dark:text-rose-400">
+                            <button type="submit" class="w-full text-start flex items-center px-4 py-2 text-sm leading-5 text-rose-600 dark:text-rose-400 hover:bg-gray-100 dark:hover:bg-slate-700 focus:outline-none transition duration-150 ease-in-out cursor-pointer font-medium">
                                 {{ __('Keluar (Log Out)') }}
-                            </x-dropdown-link>
+                            </button>
                         </form>
                     </x-slot>
                 </x-dropdown>
@@ -179,12 +164,6 @@
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
-                <!-- Theme Toggle Button Mobile -->
-                <button type="button" @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'dark' : 'light')" class="p-2 mr-2 rounded-xl border border-white/20 dark:border-white/10 bg-white/10 dark:bg-white/5 text-amber-300 hover:bg-white/20 transition" title="Ganti Mode">
-                    <svg x-show="darkMode" class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                    <svg x-show="!darkMode" class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-                </button>
-
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-xl text-white hover:bg-emerald-800 dark:hover:bg-slate-800 focus:outline-none transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -196,96 +175,225 @@
     </div>
 
     <!-- Responsive Navigation Menu (Mobile) -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-emerald-800 dark:bg-[#0b1b33] border-b border-emerald-900 dark:border-[#162a4d] transition-colors">
-        <div class="pt-2 pb-3 space-y-1 px-3">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-emerald-800/95 dark:bg-[#0b1b33]/95 backdrop-blur-md border-b border-emerald-900/60 dark:border-[#162a4d] transition-all duration-200">
+        <div class="pt-3 pb-3 space-y-1 px-3">
             @if (Auth::user()->isSuperAdmin())
                 <x-responsive-nav-link :href="route('super-admin.dashboard')" :active="request()->routeIs('super-admin.dashboard')">
-                    {{ __('Dashboard Supervisi') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                        <span>{{ __('Dashboard Supervisi') }}</span>
+                    </div>
+                    @if (request()->routeIs('super-admin.dashboard'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.fakultas.index')" :active="request()->routeIs('admin.fakultas.*')">
-                    {{ __('Fakultas & Bridge') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                        <span>{{ __('Fakultas & Bridge') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.fakultas.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.program-studi.index')" :active="request()->routeIs('admin.program-studi.*')">
-                    {{ __('Program Studi') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                        <span>{{ __('Program Studi') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.program-studi.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.mata-kuliah.index')" :active="request()->routeIs('admin.mata-kuliah.*')">
-                    {{ __('Mata Kuliah') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                        <span>{{ __('Mata Kuliah') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.mata-kuliah.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('super-admin.mahasiswa.index')" :active="request()->routeIs('super-admin.mahasiswa.*')">
-                    {{ __('Data Mahasiswa') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        <span>{{ __('Data Mahasiswa') }}</span>
+                    </div>
+                    @if (request()->routeIs('super-admin.mahasiswa.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('super-admin.wisudawan.index')" :active="request()->routeIs('super-admin.wisudawan.*')">
-                    {{ __('Data Wisudawan') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                        <span>{{ __('Data Wisudawan') }}</span>
+                    </div>
+                    @if (request()->routeIs('super-admin.wisudawan.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('super-admin.nilai.index')" :active="request()->routeIs('super-admin.nilai.*')">
-                    {{ __('Kelola Nilai') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                        <span>{{ __('Kelola Nilai') }}</span>
+                    </div>
+                    @if (request()->routeIs('super-admin.nilai.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('super-admin.audit-log.index')" :active="request()->routeIs('super-admin.audit-log.*')">
-                    {{ __('Audit Log') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>{{ __('Audit Log') }}</span>
+                    </div>
+                    @if (request()->routeIs('super-admin.audit-log.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
             @elseif (Auth::user()->isAdminFakultas())
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                    {{ __('Dashboard') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                        <span>{{ __('Dashboard') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.dashboard'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.fakultas.index')" :active="request()->routeIs('admin.fakultas.*')">
-                    {{ __('Fakultas') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                        <span>{{ __('Fakultas') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.fakultas.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.program-studi.index')" :active="request()->routeIs('admin.program-studi.*')">
-                    {{ __('Program Studi') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                        <span>{{ __('Program Studi') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.program-studi.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.mata-kuliah.index')" :active="request()->routeIs('admin.mata-kuliah.*')">
-                    {{ __('Mata Kuliah') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                        <span>{{ __('Mata Kuliah') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.mata-kuliah.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.nilai.index')" :active="request()->routeIs('admin.nilai.*')">
-                    {{ __('Kelola Nilai') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                        <span>{{ __('Kelola Nilai') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.nilai.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.koreksi.index')" :active="request()->routeIs('admin.koreksi.*')">
-                    {{ __('Koreksi Nilai') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                        <span>{{ __('Koreksi Nilai') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.koreksi.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.mahasiswa.index')" :active="request()->routeIs('admin.mahasiswa.*')">
-                    {{ __('Data Mahasiswa') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        <span>{{ __('Data Mahasiswa') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.mahasiswa.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.wisudawan.index')" :active="request()->routeIs('admin.wisudawan.*')">
-                    {{ __('Data Wisudawan') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                        <span>{{ __('Data Wisudawan') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.wisudawan.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.transkrip.index')" :active="request()->routeIs('admin.transkrip.*')">
-                    {{ __('Transkrip Nilai') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        <span>{{ __('Transkrip Nilai') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.transkrip.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.audit-log.index')" :active="request()->routeIs('admin.audit-log.*')">
-                    {{ __('Audit Log') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>{{ __('Audit Log') }}</span>
+                    </div>
+                    @if (request()->routeIs('admin.audit-log.*'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
             @else
                 <x-responsive-nav-link :href="route('mahasiswa.dashboard')" :active="request()->routeIs('mahasiswa.dashboard') && !request()->has('view')">
-                    {{ __('Transkrip Saya') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 {{ (request()->routeIs('mahasiswa.dashboard') && !request()->has('view')) ? 'text-white' : 'text-emerald-200' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        <span>{{ __('Transkrip Saya') }}</span>
+                    </div>
+                    @if (request()->routeIs('mahasiswa.dashboard') && !request()->has('view'))
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('mahasiswa.dashboard', ['view' => 'koreksi'])" :active="request('view') === 'koreksi'">
-                    {{ __('Pengajuan Koreksi') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 {{ request('view') === 'koreksi' ? 'text-white' : 'text-emerald-200' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                        <span>{{ __('Pengajuan Koreksi') }}</span>
+                    </div>
+                    @if (request('view') === 'koreksi')
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('mahasiswa.dashboard', ['view' => 'notifikasi'])" :active="request('view') === 'notifikasi'">
-                    {{ __('Notifikasi') }}
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 shrink-0 {{ request('view') === 'notifikasi' ? 'text-white' : 'text-emerald-200' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+                        <span>{{ __('Notifikasi') }}</span>
+                    </div>
+                    @if (request('view') === 'notifikasi')
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 ms-auto"></span>
+                    @endif
                 </x-responsive-nav-link>
             @endif
         </div>
 
         <!-- Responsive Settings Options -->
-        <div class="pt-3 pb-3 border-t border-emerald-900 dark:border-slate-800 px-3">
-            <div class="px-3 py-2 bg-emerald-900/60 dark:bg-slate-800/60 rounded-xl mb-2">
-                <div class="font-bold text-sm text-white">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-xs text-emerald-200 dark:text-slate-400">{{ Auth::user()->email }} ({{ ucfirst(Auth::user()->role) }})</div>
+        <div class="pt-3 pb-4 border-t border-emerald-700/60 dark:border-slate-800 px-4">
+            <div class="px-3.5 py-2.5 bg-black/15 dark:bg-slate-800/60 rounded-xl mb-3 border border-white/10">
+                <div class="font-bold text-sm text-white flex items-center justify-between">
+                    <span>{{ Auth::user()->name }}</span>
+                    <span class="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 font-semibold">{{ ucfirst(Auth::user()->role) }}</span>
+                </div>
+                <div class="font-normal text-xs text-emerald-200/90 dark:text-slate-400 mt-0.5">{{ Auth::user()->email }}</div>
             </div>
 
-            <div class="space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profil') }}
+            <div class="space-y-1.5">
+                <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
+                    <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                    <span>{{ __('Profil Saya') }}</span>
                 </x-responsive-nav-link>
 
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" class="w-full">
                     @csrf
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
+                    <button type="submit" class="flex items-center gap-3 w-full px-3.5 py-2.5 text-start text-sm font-semibold text-rose-200 hover:text-white hover:bg-rose-500/20 rounded-xl transition duration-150 ease-in-out cursor-pointer">
+                        <svg class="w-4 h-4 shrink-0 text-rose-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                        <span>{{ __('Keluar (Log Out)') }}</span>
+                    </button>
                 </form>
             </div>
         </div>
