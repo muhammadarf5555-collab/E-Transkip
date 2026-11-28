@@ -11,6 +11,23 @@ class SiakadNilai extends Model
 {
     use HasFactory;
 
+    protected static function booted(): void
+    {
+        static::saving(function (SiakadNilai $nilai) {
+            if ($nilai->nilai_angka === null) {
+                $nilai->nilai_angka = (float) ($nilai->bobot * 25);
+            }
+        });
+
+        static::saved(function (SiakadNilai $nilai) {
+            $nilai->mahasiswa?->recalculateTranskrip();
+        });
+
+        static::deleted(function (SiakadNilai $nilai) {
+            $nilai->mahasiswa?->recalculateTranskrip();
+        });
+    }
+
     protected $table = 'siakad_nilais';
 
     protected $fillable = [
