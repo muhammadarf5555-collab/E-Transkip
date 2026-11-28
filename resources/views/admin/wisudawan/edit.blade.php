@@ -2,14 +2,14 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="font-bold text-2xl text-white leading-tight">
+                <h2 class="font-bold text-2xl text-gray-900 dark:text-white leading-tight">
                     {{ __('Edit Data Wisudawan & Administrasi E-Wisuda') }}
                 </h2>
-                <p class="text-sm text-emerald-100 dark:text-gray-400 mt-1">
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
                     Memperbarui data pendaftaran wisuda, SK Yudisium, dan Ijazah NIM {{ $wisudawan->nim }}.
                 </p>
             </div>
-            <a href="{{ route('admin.wisudawan.index') }}" class="px-4 py-2 bg-white/15 hover:bg-white/25 text-white text-sm font-semibold rounded-xl transition">
+            <a href="{{ route('admin.wisudawan.index') }}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition inline-flex items-center gap-1.5 shadow-sm">
                 &larr; Kembali
             </a>
         </div>
