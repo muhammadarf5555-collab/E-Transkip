@@ -100,18 +100,18 @@
             <div class="mb-6">
                 @if ($trx && $trx->isDisahkan())
                     <div
-                        class="app-card rounded-2xl p-6 border-l-4 border-l-emerald-600 flex flex-col md:flex-row md:items-center justify-between gap-5">
-                        <div class="flex items-start space-x-4">
+                        class="app-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-emerald-600 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-5">
+                        <div class="flex items-start space-x-3 sm:space-x-4">
                             <div
-                                class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300 flex items-center justify-center shrink-0">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                 </svg>
                             </div>
                             <div>
                                 <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 mb-1">
+                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 mb-1">
                                     RESMI DISAHKAN
                                 </span>
                                 <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Transkrip Nilai Akademik
@@ -121,30 +121,30 @@
                                     UINSSC dengan kode QR verifikasi digital.
                                 </p>
                                 <p
-                                    class="text-xs text-emerald-700 dark:text-emerald-400 font-mono mt-2 font-bold inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                                    class="text-xs text-emerald-700 dark:text-emerald-400 font-mono mt-2 font-bold inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800 break-all">
                                     Kode Dokumen: {{ $trx->kode_verifikasi }}
                                 </p>
                             </div>
                         </div>
-                        <div class="shrink-0 flex items-center gap-2">
+                        <div class="shrink-0 flex items-center gap-2 w-full md:w-auto">
                             <a href="{{ route('verifikasi.transkrip', $trx->kode_verifikasi) }}" target="_blank"
-                                class="px-4 py-2 text-xs font-bold rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
+                                class="w-full md:w-auto text-center px-4 py-2 text-xs font-bold rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition">
                                 Cek Validasi Publik
                             </a>
                         </div>
                     </div>
                 @else
-                    <div class="app-card rounded-2xl p-6 border-l-4 border-l-amber-500 flex items-start space-x-4">
+                    <div class="app-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-amber-500 flex items-start space-x-3 sm:space-x-4">
                         <div
-                            class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-900/60 dark:text-amber-300 flex items-center justify-center shrink-0">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-900/60 dark:text-amber-300 flex items-center justify-center shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
                         <div>
                             <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300 mb-1">
+                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300 mb-1">
                                 PROSES VERIFIKASI FAKULTAS
                             </span>
                             <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Transkrip Wisuda Sedang
@@ -160,15 +160,15 @@
         @else
             <!-- Banner Mahasiswa Aktif (Belum Wisudawan / Dalam Masa Studi) -->
             <div class="mb-6">
-                <div class="app-card rounded-2xl p-6 border-l-4 border-l-blue-600 flex flex-col md:flex-row md:items-center justify-between gap-5 bg-gradient-to-r from-blue-50/50 via-white to-slate-50 dark:from-blue-950/20 dark:via-gray-800 dark:to-gray-800">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300 flex items-center justify-center shrink-0">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="app-card rounded-2xl p-4 sm:p-6 border-l-4 border-l-blue-600 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-5 bg-gradient-to-r from-blue-50/50 via-white to-slate-50 dark:from-blue-950/20 dark:via-gray-800 dark:to-gray-800">
+                    <div class="flex items-start space-x-3 sm:space-x-4">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300 flex items-center justify-center shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                             </svg>
                         </div>
                         <div>
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 mb-1">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 mb-1">
                                 MAHASISWA AKTIF — DALAM MASA STUDI
                             </span>
                             <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
@@ -180,9 +180,9 @@
                         </div>
                     </div>
                     @if ($trx)
-                        <div class="shrink-0 flex items-center gap-2">
+                        <div class="shrink-0 flex items-center gap-2 w-full md:w-auto">
                             <a href="{{ route('mahasiswa.transkrip.pdf', $trx) }}" target="_blank"
-                                class="px-4 py-2.5 text-xs font-bold rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition inline-flex items-center gap-2">
+                                class="w-full md:w-auto text-center px-4 py-2.5 text-xs font-bold rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition inline-flex items-center justify-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                 </svg>
@@ -195,49 +195,46 @@
         @endif
 
         <!-- KPI Cards Overview -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="app-card p-5 rounded-2xl">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+            <div class="app-card p-3.5 sm:p-5 rounded-2xl">
                 <div class="flex items-center justify-between">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Indeks
-                        Prestasi Kumulatif</p>
+                    <p class="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Indeks Prestasi Kumulatif</p>
                     <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                 </div>
-                <h3 class="text-3xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
+                <h3 class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
                     {{ number_format($trx?->ipk ?? 0, 2) }}
                 </h3>
-                <span class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 block">Skala 4.00 resmi UIN SSC</span>
+                <span class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 block">Skala 4.00 resmi UIN SSC</span>
             </div>
 
-            <div class="app-card p-5 rounded-2xl">
+            <div class="app-card p-3.5 sm:p-5 rounded-2xl">
                 <div class="flex items-center justify-between">
-                    <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total SKS
-                        Diperoleh</p>
+                    <p class="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total SKS Diperoleh</p>
                     <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
                 </div>
-                <h3 class="text-3xl font-black text-slate-900 dark:text-white mt-1">
+                <h3 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">
                     {{ $trx?->total_sks ?? $mahasiswa->siakadNilais->sum('sks') }}
                 </h3>
-                <span class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 block">Kredit Semester Ditempuh</span>
+                <span class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 block">Kredit Semester Ditempuh</span>
             </div>
 
-            <div class="app-card p-5 rounded-2xl">
-                <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Predikat
-                    Kelulusan</p>
-                <h3 class="text-base font-bold text-emerald-700 dark:text-emerald-400 mt-2 truncate">
-                    {{ $trx?->predikat ?? ($mahasiswa->wisudawan?->predikat_kelulusan ?? 'Dalam Proses') }}
+            <div class="app-card p-3.5 sm:p-5 rounded-2xl">
+                <p class="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Predikat Kelulusan</p>
+                <h3 class="text-sm sm:text-base font-bold text-emerald-700 dark:text-emerald-400 mt-1.5 sm:mt-2 truncate">
+                    {{ $trx?->predikat ?? ($mahasiswa->wisudawan?->predikat_kelulusan ?? 'Dengan Pujian (Cum Laude)') }}
                 </h3>
-                <span class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 block">Akumulasi Prestasi</span>
+                <span class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 block">Akumulasi Prestasi</span>
             </div>
 
-            <div class="app-card p-5 rounded-2xl">
-                <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status Akademik
-                </p>
-                <h3 class="text-base font-bold text-slate-800 dark:text-white mt-2 truncate flex items-center gap-1.5">
+            <div class="app-card p-3.5 sm:p-5 rounded-2xl">
+                <p class="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status Akademik</p>
+                <h3 class="text-sm sm:text-base font-bold text-slate-800 dark:text-white mt-1.5 sm:mt-2 truncate flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    {{ $mahasiswa->wisudawan ? 'Wisudawan' : 'Mahasiswa Aktif' }}
+                    {{ ($mahasiswa->status === 'Lulus' || $mahasiswa->wisudawan !== null || $trx?->wisudawan_id !== null) ? 'Wisudawan' : 'Mahasiswa Aktif' }}
                 </h3>
-                <span class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 block">Semester
-                    {{ $mahasiswa->semester ?? 7 }}</span>
+                <span class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 block">
+                    {{ ($mahasiswa->status === 'Lulus' || $mahasiswa->wisudawan !== null || $trx?->wisudawan_id !== null) ? ($mahasiswa->wisudawan?->periode_wisuda ?: 'Wisudawan Resmi') : ('Semester ' . ($mahasiswa->semester ?? 7)) }}
+                </span>
             </div>
         </div>
 
@@ -664,7 +661,7 @@
             <!-- ================= VIEW 1 (DEFAULT): TRANSKRIP & DAFTAR NILAI ================= -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 <!-- Biodata Card -->
-                <div class="app-card rounded-2xl p-6 h-fit border border-slate-300 dark:border-slate-700">
+                <div class="app-card rounded-2xl p-4 sm:p-6 h-fit border border-slate-300 dark:border-slate-700">
                     <div class="flex items-center space-x-3 pb-4 border-b-2 border-slate-200 dark:border-slate-700">
                         <div
                             class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200 flex items-center justify-center font-black text-sm border border-emerald-300 dark:border-emerald-700">
@@ -813,7 +810,7 @@
                             this.currentPage = p;
                         }
                     }
-                }" class="lg:col-span-2 app-card rounded-2xl p-6 border border-slate-300 dark:border-slate-700">
+                }" class="lg:col-span-2 app-card rounded-2xl p-4 sm:p-6 border border-slate-300 dark:border-slate-700">
                     <div
                         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b-2 border-slate-200 dark:border-slate-700">
                         <div>
