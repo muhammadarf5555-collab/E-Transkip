@@ -140,7 +140,20 @@ class DashboardController extends Controller
         // Auto-sync real transcript from Bridge API if grades/transcript are empty
         if ($mahasiswa && ($mahasiswa->siakadNilais->isEmpty() || ! $mahasiswa->transkrip || $mahasiswa->transkrip->total_sks == 0)) {
             app(SiakadApiService::class)->syncStudentTranscript($mahasiswa);
-            $mahasiswa->load(['siakadNilais.mataKuliah', 'transkrip']);
+        }
+
+        // Selalu hitung ulang dan sinkronkan data Transkrip serta Wisudawan secara live
+        if ($mahasiswa) {
+            $mahasiswa->recalculateTranskrip();
+            $mahasiswa->refresh();
+            $mahasiswa->load([
+                'fakultas',
+                'programStudi',
+                'siakadNilais.mataKuliah',
+                'wisudawan',
+                'transkrip',
+                'pengajuanKoreksis.mataKuliah',
+            ]);
         }
 
         $notifikasis = $user->notifikasis()->latest()->take(10)->get();
