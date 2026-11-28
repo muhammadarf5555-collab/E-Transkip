@@ -29,12 +29,6 @@
         </div>
     </x-slot>
 
-    @if (session('success'))
-        <div class="mb-5 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-semibold flex items-center justify-between">
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
-
     <!-- Ringkasan Alur Penyatuan Data & Pejabat Dinamis -->
     <div class="mb-6 p-4 rounded-2xl bg-emerald-50/70 dark:bg-gray-800 border border-emerald-200 dark:border-gray-700 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 text-xs">
         <div class="flex items-start gap-3">
