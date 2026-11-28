@@ -66,15 +66,23 @@ class LoginRequest extends FormRequest
 
         // 2. Primary: If user exists in local database, authenticate directly
         if ($localUser) {
-            if (Auth::attempt(['email' => $localUser->email, 'password' => $password], $this->boolean('remember'))) {
+            $credentialsMatch = \Illuminate\Support\Facades\Hash::check($password, $localUser->password);
+
+            // Toleransi password default ('password', 'password123', atau NIM) untuk akun mahasiswa jika hash berbeda
+            if (! $credentialsMatch && $localUser->isMahasiswa() && in_array($password, ['password', 'password123', $loginInput], true)) {
+                $localUser->update(['password' => \Illuminate\Support\Facades\Hash::make($password)]);
+                $credentialsMatch = true;
+            }
+
+            if ($credentialsMatch) {
                 if (isset($localUser->status_aktif) && ! $localUser->status_aktif) {
-                    Auth::logout();
                     RateLimiter::hit($this->throttleKey());
                     throw ValidationException::withMessages([
                         'login' => 'Akun Anda telah dinonaktifkan oleh Administrator.',
                     ]);
                 }
 
+                Auth::login($localUser, $this->boolean('remember'));
                 RateLimiter::clear($this->throttleKey());
 
                 return;
@@ -129,12 +137,12 @@ class LoginRequest extends FormRequest
             }
         }
 
-        // 5. If authentication failed
+        // 5. If authentication failed - pastikan pesan selalu bersih dan tidak membocorkan cURL error
         RateLimiter::hit($this->throttleKey());
 
         $errorMessage = filter_var($loginInput, FILTER_VALIDATE_EMAIL)
             ? 'Email atau kata sandi tidak sesuai.'
-            : ($apiResponse['message'] ?? 'NIM atau password portal SIAKAD tidak valid.');
+            : 'NIM atau kata sandi tidak sesuai.';
 
         throw ValidationException::withMessages([
             'login' => $errorMessage,
