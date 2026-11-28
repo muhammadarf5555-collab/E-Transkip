@@ -36,7 +36,7 @@ return [
     ],
 
     'siakad' => [
-        'base_url' => rtrim(env('SIAKAD_API_BASE_URL', 'http://localhost:8000'), '/'),
+        'base_url' => rtrim(env('SIAKAD_API_BASE_URL', 'dummy'), '/'),
         'timeout' => (int) env('SIAKAD_API_TIMEOUT', 10),
     ],
 
