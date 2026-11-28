@@ -262,6 +262,10 @@ class TranskripController extends Controller
             $transkrip->refresh();
         }
 
+        if ($transkrip->mahasiswa) {
+            $transkrip = $transkrip->mahasiswa->recalculateTranskrip();
+        }
+
         $transkrip->load([
             'mahasiswa.fakultas',
             'mahasiswa.programStudi.fakultas',
@@ -626,6 +630,10 @@ class TranskripController extends Controller
         if ((int) $transkrip->total_sks === 0 && $transkrip->mahasiswa) {
             $siakadApi->syncStudentTranscript($transkrip->mahasiswa);
             $transkrip->refresh();
+        }
+
+        if ($transkrip->mahasiswa) {
+            $transkrip = $transkrip->mahasiswa->recalculateTranskrip();
         }
 
         $transkrip->load([
