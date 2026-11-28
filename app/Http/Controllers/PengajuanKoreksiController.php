@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AturanBobotNilai;
 use App\Models\AuditLog;
+use App\Models\Mahasiswa;
 use App\Models\NilaiChangeHistory;
 use App\Models\Notifikasi;
 use App\Models\PengajuanKoreksi;
@@ -369,25 +370,7 @@ class PengajuanKoreksiController extends Controller
 
     protected function recalculateTranscript(int $mahasiswaId): void
     {
-        $nilais = SiakadNilai::where('mahasiswa_id', $mahasiswaId)->get();
-        $totalSks = 0;
-        $totalMutu = 0.0;
-
-        foreach ($nilais as $n) {
-            $bobot = AturanBobotNilai::getBobot($n->nilai_huruf);
-            $totalSks += $n->sks;
-            $totalMutu += ($bobot * $n->sks);
-        }
-
-        $ipk = $totalSks > 0 ? round($totalMutu / $totalSks, 2) : 0.00;
-
-        $trx = Transkrip::where('mahasiswa_id', $mahasiswaId)->first();
-        if ($trx) {
-            $trx->update([
-                'total_sks' => $totalSks,
-                'total_mutu' => $totalMutu,
-                'ipk' => $ipk,
-            ]);
-        }
+        $mhs = Mahasiswa::find($mahasiswaId);
+        $mhs?->recalculateTranskrip();
     }
 }
