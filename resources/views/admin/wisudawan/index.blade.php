@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h2 class="font-bold text-2xl text-white leading-tight">
+                <h2 class="font-bold text-2xl text-gray-900 dark:text-white leading-tight">
                     {{ __('Kelola Data Wisudawan & E-Wisuda API') }}
                 </h2>
-                <p class="text-sm text-emerald-100 dark:text-gray-400 mt-1">
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
                     Integrasi data administrasi lulusan (SK Yudisium, Ijazah, IPK, Lama Studi &amp; Gelar) dari E-Wisuda UINSSC.
                 </p>
             </div>
@@ -16,7 +16,7 @@
                     </svg>
                     Tarik Data E-Wisuda (API)
                 </button>
-                <a href="{{ route('admin.wisudawan.template') }}" class="px-3.5 py-2.5 bg-white/15 hover:bg-white/25 text-white text-xs sm:text-sm font-semibold rounded-xl border border-white/25 transition gap-1.5 inline-flex items-center">
+                <a href="{{ route('admin.wisudawan.template') }}" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold rounded-xl border border-slate-200 transition gap-1.5 inline-flex items-center">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
@@ -28,7 +28,7 @@
                     </svg>
                     Import CSV
                 </button>
-                <a href="{{ route('admin.wisudawan.create') }}" class="px-4 py-2.5 bg-white text-emerald-900 hover:bg-emerald-50 text-xs sm:text-sm font-bold rounded-xl shadow-sm transition gap-1.5 inline-flex items-center">
+                <a href="{{ route('admin.wisudawan.create') }}" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm transition gap-1.5 inline-flex items-center">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -37,18 +37,6 @@
             </div>
         </div>
     </x-slot>
-
-    <!-- Flash Alerts -->
-    @if (session('success'))
-        <div class="mb-5 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-sm font-semibold flex items-center justify-between">
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="mb-5 p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 text-sm font-semibold flex items-center justify-between">
-            <span>{{ session('error') }}</span>
-        </div>
-    @endif
 
     <!-- E-Wisuda API Integration Status Card -->
     @if (isset($ewisudaStatus))
