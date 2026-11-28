@@ -354,43 +354,7 @@ class NilaiController extends Controller
      */
     protected function recalculateTranscript(int $mahasiswaId): void
     {
-        $nilais = SiakadNilai::where('mahasiswa_id', $mahasiswaId)->get();
-        $totalSks = 0;
-        $totalMutu = 0.0;
-
-        foreach ($nilais as $n) {
-            $bobot = AturanBobotNilai::getBobot($n->nilai_huruf);
-            $totalSks += $n->sks;
-            $totalMutu += ($bobot * $n->sks);
-        }
-
-        $ipk = $totalSks > 0 ? round($totalMutu / $totalSks, 2) : 0.00;
-
-        $predikat = 'Cukup';
-        if ($ipk >= 3.51) {
-            $predikat = 'Dengan Pujian (Cum Laude)';
-        } elseif ($ipk >= 3.01) {
-            $predikat = 'Sangat Memuaskan';
-        } elseif ($ipk >= 2.76) {
-            $predikat = 'Memuaskan';
-        }
-
-        $trx = Transkrip::where('mahasiswa_id', $mahasiswaId)->first();
-        if ($trx) {
-            $trx->update([
-                'total_sks' => $totalSks,
-                'total_mutu' => $totalMutu,
-                'ipk' => $ipk,
-                'predikat' => $predikat,
-            ]);
-
-            if ($trx->wisudawan) {
-                $trx->wisudawan->update([
-                    'ipk' => $ipk,
-                    'total_sks' => $totalSks,
-                    'predikat_kelulusan' => $predikat,
-                ]);
-            }
-        }
+        $mhs = Mahasiswa::find($mahasiswaId);
+        $mhs?->recalculateTranskrip();
     }
 }
