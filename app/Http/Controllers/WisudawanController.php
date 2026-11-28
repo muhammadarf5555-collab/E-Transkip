@@ -404,6 +404,16 @@ class WisudawanController extends Controller
 
         $nim = $wisudawan->nim;
         $id = $wisudawan->id;
+        $mahasiswa = $wisudawan->mahasiswa;
+
+        // Lepaskan relasi wisudawan dari transkrip
+        Transkrip::where('wisudawan_id', $id)->update(['wisudawan_id' => null]);
+
+        // Kembalikan status mahasiswa ke Aktif jika sebelumnya ditandai Lulus dari data wisudawan
+        if ($mahasiswa && $mahasiswa->status === 'Lulus') {
+            $mahasiswa->updateQuietly(['status' => 'Aktif']);
+        }
+
         $wisudawan->delete();
 
         AuditLog::record('Menghapus Data Wisudawan', 'Wisudawan', (string) $id, "Menghapus data wisudawan NIM: {$nim}");
